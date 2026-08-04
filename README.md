@@ -1,4 +1,4 @@
-# Premium Products Zone — Premium eCommerce Platform
+# Premium Zone — Premium eCommerce Platform
 
 A production-ready, scalable eCommerce platform for **luxury watches & premium gadgets**.
 Three independent repositories that work together seamlessly.
@@ -7,10 +7,9 @@ Three independent repositories that work together seamlessly.
 
 ```
 premium-products-zone/
-├── ecommerce-backend/   Node.js + Express + MongoDB REST API
-├── ecommerce-client/    Next.js 15 storefront (customer)
-├── ecommerce-admin/     React + Vite admin console
-└── docker-compose.yml   Mongo + backend for local orchestration
+├── backend/   Node.js + Express + MongoDB REST API
+├── client/    Next.js 15 storefront (customer)
+└── admin/     React + Vite admin console
 ```
 
 ## Design language
@@ -73,7 +72,7 @@ drop-in via gateway services (`PAYMENT_METHOD` enum + `order.paymentResult`).
 
 ### 1. Backend
 ```bash
-cd ecommerce-backend
+cd backend
 cp .env.example .env          # add Mongo URI, JWT secrets, Cloudinary, SMTP, Google
 npm install
 npm run seed                  # super admin (admin@luxe.com / Admin@1234) + sample data
@@ -82,29 +81,23 @@ npm run dev                   # http://localhost:5000/api/v1
 
 ### 2. Client
 ```bash
-cd ecommerce-client
+cd client
 cp .env.example .env.local
 npm install && npm run dev    # http://localhost:3000
 ```
 
 ### 3. Admin
 ```bash
-cd ecommerce-admin
+cd admin
 cp .env.example .env
 npm install && npm run dev    # http://localhost:5173
-```
-
-### Or with Docker (Mongo + backend)
-```bash
-cp ecommerce-backend/.env.example ecommerce-backend/.env   # fill secrets
-docker compose up --build
 ```
 
 ## Deployment
 
 | Repo     | Recommended host              |
 |----------|-------------------------------|
-| Backend  | Render / Railway / Fly / Docker |
+| Backend  | Render / Railway / Fly        |
 | Client   | Vercel (Next.js native)       |
 | Admin    | Vercel / Netlify (static SPA) |
 | Database | MongoDB Atlas                 |
