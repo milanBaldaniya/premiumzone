@@ -2,8 +2,14 @@ import { useState } from 'react';
 import {
   Table, Button, Modal, Form, Input, Select, InputNumber, Switch, Space, Popconfirm, Typography, Image, Tag, App,
 } from 'antd';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { useGetBannersQuery, useCreateBannerMutation, useDeleteBannerMutation } from '../store/api/adminApi';
+import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import {
+  useGetBannersQuery,
+  useCreateBannerMutation,
+  useUpdateBannerMutation,
+  useDeleteBannerMutation,
+} from '../store/api/adminApi';
+import ImageUploader from '../components/ImageUploader';
 
 const { Title } = Typography;
 
@@ -13,22 +19,37 @@ export default function Banners() {
   const { message } = App.useApp();
   const { data, isFetching } = useGetBannersQuery({ limit: 100 });
   const [createBanner] = useCreateBannerMutation();
+  const [updateBanner] = useUpdateBannerMutation();
   const [deleteBanner] = useDeleteBannerMutation();
 
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState(null);
+  const [images, setImages] = useState([]);
   const [form] = Form.useForm();
 
+  const openModal = (record) => {
+    setEditing(record);
+    setImages(record?.image ? [record.image] : []);
+    form.setFieldsValue(
+      record || { placement: 'hero', isActive: true, ctaText: 'Shop Now', ctaLink: '/products', sortOrder: 0 }
+    );
+    setOpen(true);
+  };
+
   const onFinish = async (values) => {
-    const payload = {
-      ...values,
-      image: { url: values.imageUrl },
-    };
-    delete payload.imageUrl;
+    if (!images[0]) {
+      message.error('Please upload a banner image');
+      return;
+    }
+    const payload = { ...values, image: images[0] };
     try {
-      await createBanner(payload).unwrap();
-      message.success('Banner created');
+      if (editing) await updateBanner({ id: editing._id, ...payload }).unwrap();
+      else await createBanner(payload).unwrap();
+      message.success(editing ? 'Banner updated' : 'Banner created');
       setOpen(false);
       form.resetFields();
+      setEditing(null);
+      setImages([]);
     } catch (err) {
       message.error(err?.data?.message || 'Save failed');
     }
@@ -47,9 +68,12 @@ export default function Banners() {
     {
       title: 'Actions',
       render: (_, row) => (
-        <Popconfirm title="Delete banner?" onConfirm={() => deleteBanner(row._id).unwrap().then(() => message.success('Deleted'))}>
-          <Button size="small" danger icon={<DeleteOutlined />} />
-        </Popconfirm>
+        <Space>
+          <Button size="small" icon={<EditOutlined />} onClick={() => openModal(row)} />
+          <Popconfirm title="Delete banner?" onConfirm={() => deleteBanner(row._id).unwrap().then(() => message.success('Deleted'))}>
+            <Button size="small" danger icon={<DeleteOutlined />} />
+          </Popconfirm>
+        </Space>
       ),
     },
   ];
@@ -58,17 +82,23 @@ export default function Banners() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
         <Title level={3} className="font-display" style={{ margin: 0 }}>Banners</Title>
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => setOpen(true)}>Add Banner</Button>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => openModal(null)}>Add Banner</Button>
       </div>
 
       <Table rowKey="_id" columns={columns} dataSource={data?.data || []} loading={isFetching} scroll={{ x: 700 }} />
 
-      <Modal title="New Banner" open={open} onCancel={() => setOpen(false)} onOk={() => form.submit()} destroyOnClose>
-        <Form form={form} layout="vertical" onFinish={onFinish} initialValues={{ placement: 'hero', isActive: true, ctaText: 'Shop Now', ctaLink: '/products', sortOrder: 0 }}>
+      <Modal
+        title={editing ? 'Edit Banner' : 'New Banner'}
+        open={open}
+        onCancel={() => { setOpen(false); setEditing(null); setImages([]); form.resetFields(); }}
+        onOk={() => form.submit()}
+        destroyOnClose
+      >
+        <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item name="title" label="Title" rules={[{ required: true }]}><Input /></Form.Item>
           <Form.Item name="subtitle" label="Subtitle"><Input /></Form.Item>
-          <Form.Item name="imageUrl" label="Image URL" rules={[{ required: true }]}>
-            <Input placeholder="https://res.cloudinary.com/…" />
+          <Form.Item label="Banner Image" required>
+            <ImageUploader value={images} onChange={setImages} folder="banners" max={1} />
           </Form.Item>
           <Space style={{ display: 'flex' }} align="baseline">
             <Form.Item name="placement" label="Placement">

@@ -77,12 +77,15 @@ const orderSchema = new Schema(
       index: true,
     },
     paymentResult: {
-      // Reserved for Stripe/Razorpay/PayPal gateway responses
+      // Populated for online gateway payments (Razorpay, etc.)
       transactionId: String,
       provider: String,
       paidAt: Date,
       raw: Schema.Types.Mixed,
     },
+    // Razorpay order id — doubles as the idempotency key so a verify-call and a
+    // webhook racing each other can't create two orders for the same payment.
+    razorpayOrderId: { type: String, unique: true, sparse: true, index: true },
 
     status: {
       type: String,

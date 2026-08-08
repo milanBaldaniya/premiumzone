@@ -60,10 +60,10 @@ export default function Products() {
       dataIndex: 'price',
       render: (price, row) => (
         <span>
-          ${row.discountPrice > 0 ? row.discountPrice : price}
+          ₹{row.discountPrice > 0 ? row.discountPrice : price}
           {row.discountPrice > 0 && (
             <span style={{ color: '#94a3b8', textDecoration: 'line-through', marginLeft: 6, fontSize: 12 }}>
-              ${price}
+              ₹{price}
             </span>
           )}
         </span>

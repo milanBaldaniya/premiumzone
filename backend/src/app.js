@@ -54,7 +54,9 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
 // ── Body parsing ─────────────────────────────────────────
-app.use(express.json({ limit: '10mb' }));
+// Stash the raw bytes alongside the parsed body — the Razorpay webhook needs the exact
+// raw payload (not a re-serialized copy) to verify its HMAC signature.
+app.use(express.json({ limit: '10mb', verify: (req, _res, buf) => { req.rawBody = buf; } }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser(env.COOKIE_SECRET));
 

@@ -30,7 +30,7 @@ import {
 import { COLORS } from '../theme/antdTheme';
 
 const { Title } = Typography;
-const money = (v) => `$${(v || 0).toLocaleString()}`;
+const money = (v) => `₹${(v || 0).toLocaleString()}`;
 const PIE_COLORS = ['#0F172A', '#D4AF37', '#B8942A', '#64748b', '#94a3b8', '#cbd5e1', '#e2e8f0', '#334155'];
 
 function StatCard({ icon, title, value, prefix, color, bg }) {

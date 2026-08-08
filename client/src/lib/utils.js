@@ -5,8 +5,8 @@ import { twMerge } from 'tailwind-merge';
 export const cn = (...inputs) => twMerge(clsx(inputs));
 
 /** Formats a number as currency. */
-export const formatPrice = (amount, currency = 'USD') =>
-  new Intl.NumberFormat('en-US', {
+export const formatPrice = (amount, currency = 'INR') =>
+  new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency,
     maximumFractionDigits: 0,

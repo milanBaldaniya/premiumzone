@@ -16,6 +16,10 @@ const envSchema = z.object({
 
   MONGO_URI: z.string().min(1, 'MONGO_URI is required'),
 
+  RAZORPAY_KEY_ID: z.string().min(1, 'RAZORPAY_KEY_ID is required'),
+  RAZORPAY_KEY_SECRET: z.string().min(1, 'RAZORPAY_KEY_SECRET is required'),
+  RAZORPAY_WEBHOOK_SECRET: z.string().optional().or(z.literal('')),
+
   JWT_ACCESS_SECRET: z.string().min(1),
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
   JWT_REFRESH_SECRET: z.string().min(1),

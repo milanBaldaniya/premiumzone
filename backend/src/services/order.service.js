@@ -54,8 +54,17 @@ const reserveStock = async (lineItems) => {
 };
 
 export const placeOrder = async (user, payload) => {
-  const { addressId, shippingAddress, paymentMethod = PAYMENT_METHOD.COD, couponCode, notes } =
-    payload;
+  const {
+    addressId,
+    shippingAddress,
+    paymentMethod = PAYMENT_METHOD.COD,
+    couponCode,
+    notes,
+    // Set only by the Razorpay verify/webhook flow once payment has actually been captured.
+    paymentStatus = PAYMENT_STATUS.PENDING,
+    paymentResult,
+    razorpayOrderId,
+  } = payload;
 
   const cart = await Cart.findOne({ user: user._id });
   if (!cart || !cart.items.length) throw ApiError.badRequest('Your cart is empty');
@@ -102,7 +111,9 @@ export const placeOrder = async (user, payload) => {
     currency: totals.currency,
     coupon: couponDoc ? { code: couponDoc.code, discount } : undefined,
     paymentMethod,
-    paymentStatus: PAYMENT_STATUS.PENDING,
+    paymentStatus,
+    paymentResult,
+    razorpayOrderId,
     notes,
   });
 

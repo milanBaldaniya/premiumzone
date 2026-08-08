@@ -36,6 +36,10 @@ export const catalogApi = baseApi.injectEndpoints({
     }),
 
     // Reviews
+    getTopReviews: build.query({
+      query: (limit = 8) => `/reviews/top?limit=${limit}`,
+      providesTags: ['Review'],
+    }),
     getProductReviews: build.query({
       query: ({ productId, ...params }) => `/reviews/product/${productId}?${qs(params)}`,
       providesTags: ['Review'],
@@ -72,6 +76,7 @@ export const {
   useGetRelatedProductsQuery,
   useGetCategoryTreeQuery,
   useGetBrandsQuery,
+  useGetTopReviewsQuery,
   useGetProductReviewsQuery,
   useCreateReviewMutation,
   useGetActiveBannersQuery,

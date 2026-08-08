@@ -85,6 +85,15 @@ export const commerceApi = baseApi.injectEndpoints({
       invalidatesTags: ['Order'],
     }),
 
+    // Payments (Razorpay)
+    createRazorpayOrder: build.mutation({
+      query: (body) => ({ url: '/payments/razorpay/order', method: 'POST', body }),
+    }),
+    verifyRazorpayPayment: build.mutation({
+      query: (body) => ({ url: '/payments/razorpay/verify', method: 'POST', body }),
+      invalidatesTags: ['Order', 'Cart'],
+    }),
+
     // Notifications
     getNotifications: build.query({
       query: () => '/notifications',
@@ -116,6 +125,8 @@ export const {
   useGetMyOrdersQuery,
   useGetMyOrderQuery,
   useCancelOrderMutation,
+  useCreateRazorpayOrderMutation,
+  useVerifyRazorpayPaymentMutation,
   useGetNotificationsQuery,
   useMarkNotificationReadMutation,
 } = commerceApi;

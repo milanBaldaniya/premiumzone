@@ -38,7 +38,7 @@ const productSchema = new Schema(
 
     price: { type: Number, required: true, min: 0 },
     discountPrice: { type: Number, min: 0, default: 0 },
-    currency: { type: String, default: 'USD' },
+    currency: { type: String, default: 'INR' },
 
     brand: { type: Schema.Types.ObjectId, ref: 'Brand', required: true, index: true },
     category: { type: Schema.Types.ObjectId, ref: 'Category', required: true, index: true },

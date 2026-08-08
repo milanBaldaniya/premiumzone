@@ -80,7 +80,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="container-luxe flex flex-col items-center justify-between gap-3 py-6 text-xs text-slate-500 sm:flex-row">
           <p>© {new Date().getFullYear()} Premium Zone. All rights reserved.</p>
-          <p>Cash on Delivery available · Stripe · Razorpay · PayPal coming soon</p>
+          <p>Cash on Delivery &amp; Razorpay (UPI, Cards, Netbanking) available</p>
         </div>
       </div>
     </footer>

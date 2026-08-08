@@ -17,8 +17,8 @@ const settingSchema = new Schema(
       email: String,
       phone: String,
       address: String,
-      currency: { type: String, default: 'USD' },
-      currencySymbol: { type: String, default: '$' },
+      currency: { type: String, default: 'INR' },
+      currencySymbol: { type: String, default: '₹' },
     },
     shipping: {
       freeShippingThreshold: { type: Number, default: 500 },

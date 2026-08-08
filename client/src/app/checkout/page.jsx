@@ -5,30 +5,42 @@ import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { selectIsAuth, selectInitialized } from '@/store/slices/authSlice';
+import { FaMoneyBillWave, FaShieldAlt } from 'react-icons/fa';
+import { SiPhonepe, SiGooglepay } from 'react-icons/si';
+import { selectIsAuth, selectInitialized, selectUser } from '@/store/slices/authSlice';
 import {
   useGetCartQuery,
   useGetAddressesQuery,
   useCreateAddressMutation,
   usePlaceOrderMutation,
+  useCreateRazorpayOrderMutation,
+  useVerifyRazorpayPaymentMutation,
 } from '@/store/api/commerceApi';
 import Button from '@/components/ui/Button';
 import { Field } from '../login/page';
 import { formatPrice } from '@/lib/utils';
 import { buildAuthHref } from '@/lib/authRedirect';
+import { loadRazorpayScript } from '@/lib/razorpay';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const isAuth = useSelector(selectIsAuth);
   const initialized = useSelector(selectInitialized);
+  const user = useSelector(selectUser);
   const { data: cartData } = useGetCartQuery(undefined, { skip: !isAuth });
   const { data: addressData } = useGetAddressesQuery(undefined, { skip: !isAuth });
   const [createAddress] = useCreateAddressMutation();
-  const [placeOrder, { isLoading: placing }] = usePlaceOrderMutation();
+  const [placeOrder, { isLoading: placingCod }] = usePlaceOrderMutation();
+  const [createRazorpayOrder] = useCreateRazorpayOrderMutation();
+  const [verifyRazorpayPayment] = useVerifyRazorpayPaymentMutation();
 
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('razorpay');
+  const [payingOnline, setPayingOnline] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const placing = placingCod || payingOnline;
 
   const summary = cartData?.data?.summary || {};
   const addresses = addressData?.data || [];
@@ -56,12 +68,70 @@ export default function CheckoutPage() {
       toast.error('Please add a shipping address');
       return;
     }
+
+    if (paymentMethod === 'cod') {
+      try {
+        const res = await placeOrder({ addressId, paymentMethod: 'cod' }).unwrap();
+        toast.success('Order placed successfully!');
+        router.push(`/account/orders/${res.data.orderNumber}`);
+      } catch (err) {
+        toast.error(err?.data?.message || 'Could not place order');
+      }
+      return;
+    }
+
+    // Razorpay — pay online (cards, netbanking, wallets, and UPI apps like GPay/PhonePe)
+    setPayingOnline(true);
     try {
-      const res = await placeOrder({ addressId, paymentMethod: 'cod' }).unwrap();
-      toast.success('Order placed successfully!');
-      router.push(`/account/orders/${res.data.orderNumber}`);
+      const [ready, { data: rpOrder }] = await Promise.all([
+        loadRazorpayScript(),
+        createRazorpayOrder({ addressId }).unwrap(),
+      ]);
+      if (!ready) throw new Error('Could not load Razorpay checkout');
+
+      const rzp = new window.Razorpay({
+        key: rpOrder.keyId,
+        order_id: rpOrder.razorpayOrderId,
+        amount: rpOrder.amount,
+        currency: rpOrder.currency,
+        name: 'Premium Zone',
+        description: 'Order payment',
+        image: '/favicon.ico',
+        prefill: {
+          name: user?.name,
+          email: user?.email,
+          contact: user?.phone,
+        },
+        theme: { color: '#D4AF37' },
+        // Which methods appear (UPI, cards, netbanking, ...) is controlled by the Razorpay
+        // Dashboard's Payment Methods settings for this account, not by a client-side flag.
+        handler: async (response) => {
+          try {
+            const res = await verifyRazorpayPayment({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }).unwrap();
+            toast.success('Payment successful — order placed!');
+            router.push(`/account/orders/${res.data.orderNumber}`);
+          } catch (err) {
+            toast.error(err?.data?.message || 'Payment succeeded but order verification failed — contact support');
+          } finally {
+            setPayingOnline(false);
+          }
+        },
+        modal: {
+          ondismiss: () => setPayingOnline(false),
+        },
+      });
+      rzp.on('payment.failed', (resp) => {
+        toast.error(resp.error?.description || 'Payment failed');
+        setPayingOnline(false);
+      });
+      rzp.open();
     } catch (err) {
-      toast.error(err?.data?.message || 'Could not place order');
+      toast.error(err?.data?.message || err.message || 'Could not start payment');
+      setPayingOnline(false);
     }
   };
 
@@ -145,16 +215,52 @@ export default function CheckoutPage() {
           {/* Payment method */}
           <section className="card-luxe p-6">
             <h2 className="mb-4 font-display text-xl font-bold text-primary">Payment Method</h2>
-            <label className="flex items-center gap-3 rounded-xl border border-accent bg-accent/5 p-4">
-              <input type="radio" checked readOnly className="accent-[#D4AF37]" />
-              <div>
-                <p className="font-semibold text-primary">Cash on Delivery</p>
-                <p className="text-sm text-slate-500">Pay when your order arrives</p>
-              </div>
-            </label>
-            <p className="mt-3 text-xs text-slate-400">
-              Stripe, Razorpay &amp; PayPal will be available soon.
-            </p>
+            <div className="space-y-3">
+              <label
+                className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors ${
+                  paymentMethod === 'razorpay' ? 'border-accent bg-accent/5' : 'border-slate-200'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  checked={paymentMethod === 'razorpay'}
+                  onChange={() => setPaymentMethod('razorpay')}
+                  className="mt-1 accent-[#D4AF37]"
+                />
+                <div className="flex-1">
+                  <p className="font-semibold text-primary">Pay Online</p>
+                  <p className="text-sm text-slate-500">UPI, Cards, Netbanking &amp; Wallets — powered by Razorpay</p>
+                  <div className="mt-2 flex items-center gap-3 text-slate-400">
+                    <SiGooglepay size={26} className="text-slate-600" title="Google Pay" />
+                    <SiPhonepe size={20} className="text-[#5F259F]" title="PhonePe" />
+                    <span className="rounded border border-slate-200 px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-slate-500">
+                      UPI
+                    </span>
+                    <FaShieldAlt size={13} className="ml-auto text-accent-dark" title="Secured by Razorpay" />
+                  </div>
+                </div>
+              </label>
+
+              <label
+                className={`flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition-colors ${
+                  paymentMethod === 'cod' ? 'border-accent bg-accent/5' : 'border-slate-200'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  checked={paymentMethod === 'cod'}
+                  onChange={() => setPaymentMethod('cod')}
+                  className="accent-[#D4AF37]"
+                />
+                <FaMoneyBillWave className="text-slate-400" size={18} />
+                <div>
+                  <p className="font-semibold text-primary">Cash on Delivery</p>
+                  <p className="text-sm text-slate-500">Pay when your order arrives</p>
+                </div>
+              </label>
+            </div>
           </section>
         </div>
 
@@ -174,7 +280,7 @@ export default function CheckoutPage() {
             <span className="font-display text-lg font-bold text-primary">{formatPrice(summary.grandTotal)}</span>
           </div>
           <Button variant="gold" onClick={handlePlaceOrder} loading={placing} className="w-full">
-            Place Order
+            {paymentMethod === 'razorpay' ? `Pay ${formatPrice(summary.grandTotal)}` : 'Place Order'}
           </Button>
         </aside>
       </div>

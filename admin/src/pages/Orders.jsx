@@ -35,7 +35,7 @@ export default function Orders() {
     { title: 'Order #', dataIndex: 'orderNumber', render: (v) => <strong>{v}</strong> },
     { title: 'Customer', dataIndex: ['user', 'name'], render: (v, r) => v || r.shippingAddress?.fullName || '—' },
     { title: 'Items', dataIndex: 'items', render: (items) => items?.length || 0 },
-    { title: 'Total', dataIndex: 'grandTotal', render: (v) => `$${v?.toLocaleString()}` },
+    { title: 'Total', dataIndex: 'grandTotal', render: (v) => `₹${v?.toLocaleString()}` },
     {
       title: 'Payment',
       dataIndex: 'paymentStatus',

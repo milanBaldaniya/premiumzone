@@ -45,9 +45,9 @@ export default function OrderDetail() {
   const itemColumns = [
     { title: 'Product', dataIndex: 'name' },
     { title: 'SKU', dataIndex: 'sku' },
-    { title: 'Price', dataIndex: 'price', render: (v) => `$${v}` },
+    { title: 'Price', dataIndex: 'price', render: (v) => `₹${v}` },
     { title: 'Qty', dataIndex: 'quantity' },
-    { title: 'Subtotal', dataIndex: 'subtotal', render: (v) => `$${v}` },
+    { title: 'Subtotal', dataIndex: 'subtotal', render: (v) => `₹${v}` },
   ];
 
   return (
@@ -113,7 +113,27 @@ export default function OrderDetail() {
             <Descriptions column={1} size="small">
               <Descriptions.Item label="Name">{order.user?.name || order.shippingAddress?.fullName}</Descriptions.Item>
               <Descriptions.Item label="Email">{order.user?.email || '—'}</Descriptions.Item>
-              <Descriptions.Item label="Payment">{order.paymentMethod?.toUpperCase()}</Descriptions.Item>
+            </Descriptions>
+          </Card>
+
+          <Card title="Payment" style={{ marginBottom: 16 }}>
+            <Descriptions column={1} size="small">
+              <Descriptions.Item label="Method">{order.paymentMethod?.toUpperCase()}</Descriptions.Item>
+              <Descriptions.Item label="Status">
+                <Tag color={order.paymentStatus === 'paid' ? 'green' : order.paymentStatus === 'failed' ? 'red' : 'gold'}>
+                  {order.paymentStatus?.toUpperCase()}
+                </Tag>
+              </Descriptions.Item>
+              {order.paymentResult?.transactionId && (
+                <Descriptions.Item label="Transaction ID">
+                  <Text code copyable style={{ fontSize: 12 }}>{order.paymentResult.transactionId}</Text>
+                </Descriptions.Item>
+              )}
+              {order.paymentResult?.paidAt && (
+                <Descriptions.Item label="Paid At">
+                  {dayjs(order.paymentResult.paidAt).format('MMM D, YYYY h:mm A')}
+                </Descriptions.Item>
+              )}
             </Descriptions>
           </Card>
 
@@ -136,6 +156,6 @@ export default function OrderDetail() {
 const Summary = ({ label, value, bold }) => (
   <div style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0' }}>
     <Text type={bold ? undefined : 'secondary'} strong={bold}>{label}</Text>
-    <Text strong={bold}>${value?.toLocaleString()}</Text>
+    <Text strong={bold}>₹{value?.toLocaleString()}</Text>
   </div>
 );

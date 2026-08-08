@@ -41,10 +41,10 @@ export default function Settings() {
           </Col>
           <Col xs={24} lg={12}>
             <Card title="Shipping & Tax" style={{ marginBottom: 16 }}>
-              <Form.Item name={['shipping', 'freeShippingThreshold']} label="Free Shipping Threshold ($)">
+              <Form.Item name={['shipping', 'freeShippingThreshold']} label="Free Shipping Threshold (₹)">
                 <InputNumber min={0} style={{ width: '100%' }} />
               </Form.Item>
-              <Form.Item name={['shipping', 'flatRate']} label="Flat Shipping Rate ($)">
+              <Form.Item name={['shipping', 'flatRate']} label="Flat Shipping Rate (₹)">
                 <InputNumber min={0} style={{ width: '100%' }} />
               </Form.Item>
               <Form.Item name={['shipping', 'taxPercent']} label="Tax (%)">

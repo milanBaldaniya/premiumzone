@@ -118,6 +118,10 @@ export const adminApi = baseApi.injectEndpoints({
       query: (body) => ({ url: '/banners', method: 'POST', body }),
       invalidatesTags: ['Banner'],
     }),
+    updateBanner: build.mutation({
+      query: ({ id, ...body }) => ({ url: `/banners/${id}`, method: 'PATCH', body }),
+      invalidatesTags: ['Banner'],
+    }),
     deleteBanner: build.mutation({
       query: (id) => ({ url: `/banners/${id}`, method: 'DELETE' }),
       invalidatesTags: ['Banner'],
@@ -185,6 +189,7 @@ export const {
   useModerateReviewMutation,
   useGetBannersQuery,
   useCreateBannerMutation,
+  useUpdateBannerMutation,
   useDeleteBannerMutation,
   useGetSettingsQuery,
   useUpdateSettingsMutation,

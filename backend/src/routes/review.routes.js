@@ -11,6 +11,7 @@ router.get('/admin/all', ...adminOnly, ctrl.adminListReviews);
 router.patch('/admin/:id/moderate', ...adminOnly, ctrl.adminModerateReview);
 
 // Public + customer
+router.get('/top', ctrl.getTopReviews);
 router.get('/product/:productId', ctrl.getProductReviews);
 router.post('/product/:productId', authenticate, ctrl.createReview);
 router.patch('/:id', authenticate, ctrl.updateReview);

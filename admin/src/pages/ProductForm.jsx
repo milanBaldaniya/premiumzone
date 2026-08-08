@@ -81,7 +81,7 @@ export default function ProductForm() {
         form={form}
         layout="vertical"
         onFinish={onFinish}
-        initialValues={{ status: 'active', stock: 0, price: 0, currency: 'USD', gender: 'unisex' }}
+        initialValues={{ status: 'active', stock: 0, price: 0, currency: 'INR', gender: 'unisex' }}
       >
         <Row gutter={16}>
           <Col xs={24} lg={16}>
@@ -113,12 +113,12 @@ export default function ProductForm() {
             <Card title="Pricing & Inventory">
               <Row gutter={16}>
                 <Col span={8}>
-                  <Form.Item name="price" label="Price ($)" rules={[{ required: true }]}>
+                  <Form.Item name="price" label="Price (₹)" rules={[{ required: true }]}>
                     <InputNumber min={0} style={{ width: '100%' }} />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <Form.Item name="discountPrice" label="Discount Price ($)">
+                  <Form.Item name="discountPrice" label="Discount Price (₹)">
                     <InputNumber min={0} style={{ width: '100%' }} />
                   </Form.Item>
                 </Col>

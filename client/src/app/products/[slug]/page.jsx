@@ -13,6 +13,7 @@ import { useRequireAuth } from '@/hooks/useRequireAuth';
 import Button from '@/components/ui/Button';
 import Rating from '@/components/ui/Rating';
 import ProductGrid from '@/components/product/ProductGrid';
+import ProductReviews from '@/components/product/ProductReviews';
 import { formatPrice, discountPercent } from '@/lib/utils';
 
 const PLACEHOLDER =
@@ -193,6 +194,12 @@ export default function ProductDetailPage({ params }) {
           </div>
         )}
       </div>
+
+      <ProductReviews
+        productId={product._id}
+        ratingsAverage={product.ratingsAverage}
+        ratingsCount={product.ratingsCount}
+      />
 
       {related?.data?.length > 0 && (
         <section className="mt-16">

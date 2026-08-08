@@ -52,9 +52,9 @@ export default function Coupons() {
     { title: 'Code', dataIndex: 'code', render: (v) => <Tag color="gold" style={{ fontWeight: 700 }}>{v}</Tag> },
     {
       title: 'Discount',
-      render: (_, r) => (r.type === 'percentage' ? `${r.value}%` : `$${r.value}`),
+      render: (_, r) => (r.type === 'percentage' ? `${r.value}%` : `₹${r.value}`),
     },
-    { title: 'Min Order', dataIndex: 'minOrderAmount', render: (v) => `$${v || 0}` },
+    { title: 'Min Order', dataIndex: 'minOrderAmount', render: (v) => `₹${v || 0}` },
     { title: 'Used', render: (_, r) => `${r.usedCount || 0}${r.usageLimit ? ` / ${r.usageLimit}` : ''}` },
     { title: 'Expires', dataIndex: 'expiresAt', render: (d) => (d ? dayjs(d).format('MMM D, YYYY') : '—') },
     { title: 'Status', dataIndex: 'isActive', render: (v) => <Tag color={v ? 'green' : 'red'}>{v ? 'Active' : 'Inactive'}</Tag> },
@@ -95,13 +95,13 @@ export default function Coupons() {
             <Form.Item name="type" label="Type" rules={[{ required: true }]}>
               <Select
                 style={{ width: 140 }}
-                options={[{ value: 'percentage', label: 'Percentage' }, { value: 'fixed', label: 'Fixed ($)' }]}
+                options={[{ value: 'percentage', label: 'Percentage' }, { value: 'fixed', label: 'Fixed (₹)' }]}
               />
             </Form.Item>
             <Form.Item name="value" label="Value" rules={[{ required: true }]}>
               <InputNumber min={0} style={{ width: 120 }} />
             </Form.Item>
-            <Form.Item name="minOrderAmount" label="Min Order ($)">
+            <Form.Item name="minOrderAmount" label="Min Order (₹)">
               <InputNumber min={0} style={{ width: 120 }} />
             </Form.Item>
           </Space>

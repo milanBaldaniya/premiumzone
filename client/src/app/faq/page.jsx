@@ -12,11 +12,11 @@ const FAQS = [
   },
   {
     q: 'What payment methods do you accept?',
-    a: 'We currently offer Cash on Delivery. Stripe, Razorpay and PayPal are being integrated and will be available soon for secure online payments.',
+    a: 'We accept Cash on Delivery and online payments via Razorpay — including UPI (GPay, PhonePe & more), credit/debit cards, netbanking, and wallets.',
   },
   {
     q: 'How long does shipping take?',
-    a: 'Orders are processed within 1–2 business days. Standard delivery takes 3–7 business days depending on your location. Free shipping applies to orders over $500.',
+    a: 'Orders are processed within 1–2 business days. Standard delivery takes 3–7 business days depending on your location. Free shipping applies to orders over ₹500.',
   },
   {
     q: 'What is your return policy?',

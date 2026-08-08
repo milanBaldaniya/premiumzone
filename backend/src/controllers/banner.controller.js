@@ -9,7 +9,26 @@ const factory = createFactory(Banner, { searchFields: ['title'] });
 
 export const listBanners = factory.list;
 export const createBanner = factory.create;
-export const updateBanner = factory.update;
+
+/** Update a banner; if the image/mobileImage is replaced, delete the old Cloudinary asset. */
+export const updateBanner = asyncHandler(async (req, res) => {
+  const banner = await Banner.findById(req.params.id);
+  if (!banner) throw ApiError.notFound('Banner not found');
+
+  const prevImagePublicId = banner.image?.publicId;
+  const prevMobilePublicId = banner.mobileImage?.publicId;
+
+  banner.set(req.body);
+  await banner.save();
+
+  const stalePublicIds = [
+    req.body.image && prevImagePublicId !== banner.image?.publicId ? prevImagePublicId : null,
+    req.body.mobileImage && prevMobilePublicId !== banner.mobileImage?.publicId ? prevMobilePublicId : null,
+  ].filter(Boolean);
+  if (stalePublicIds.length) await Promise.all(stalePublicIds.map(deleteAsset));
+
+  sendResponse(res, { data: banner, message: 'Banner updated' });
+});
 
 /** Public — active banners for a given placement (default: hero). */
 export const getActiveBanners = asyncHandler(async (req, res) => {

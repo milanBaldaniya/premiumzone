@@ -2,11 +2,12 @@
 
 import Hero from '@/components/home/Hero';
 import ProductSection from '@/components/home/ProductSection';
+import Testimonials from '@/components/home/Testimonials';
 import { useGetStorefrontSectionsQuery } from '@/store/api/catalogApi';
 import { FaShippingFast, FaShieldAlt, FaGem, FaUndo } from 'react-icons/fa';
 
 const PERKS = [
-  { icon: FaShippingFast, title: 'Free Shipping', desc: 'On orders over $500' },
+  { icon: FaShippingFast, title: 'Free Shipping', desc: 'On orders over ₹500' },
   { icon: FaShieldAlt, title: 'Authenticity Guaranteed', desc: '100% genuine products' },
   { icon: FaGem, title: 'Premium Quality', desc: 'Curated luxury selection' },
   { icon: FaUndo, title: 'Easy Returns', desc: '30-day return policy' },
@@ -80,6 +81,8 @@ export default function HomePage() {
         isLoading={isLoading}
         viewAllHref="/products?bestSeller=true"
       />
+
+      <Testimonials />
     </>
   );
 }

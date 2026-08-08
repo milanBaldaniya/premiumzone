@@ -6,6 +6,17 @@ import { sendResponse, buildMeta } from '../utils/ApiResponse.js';
 import { ApiError } from '../utils/ApiError.js';
 import { QueryBuilder } from '../utils/QueryBuilder.js';
 
+/** Public — best reviews across all products, for homepage testimonials. */
+export const getTopReviews = asyncHandler(async (req, res) => {
+  const limit = Math.min(Number(req.query.limit) || 8, 20);
+  const reviews = await Review.find({ isApproved: true, rating: { $gte: 4 }, comment: { $exists: true, $ne: '' } })
+    .sort({ rating: -1, helpfulCount: -1, createdAt: -1 })
+    .limit(limit)
+    .populate({ path: 'user', select: 'name avatar' })
+    .populate({ path: 'product', select: 'name slug thumbnail' });
+  sendResponse(res, { data: reviews, message: 'Top reviews' });
+});
+
 export const getProductReviews = asyncHandler(async (req, res) => {
   const filter = { product: req.params.productId, isApproved: true };
   const qb = new QueryBuilder(Review.find(filter), req.query).sort().paginate();
