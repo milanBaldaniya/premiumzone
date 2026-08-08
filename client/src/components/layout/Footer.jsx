@@ -33,7 +33,7 @@ const COLUMNS = [
 
 export default function Footer() {
   return (
-    <footer className="mt-20 bg-dark-gradient text-slate-300">
+    <footer className="bg-dark-gradient text-slate-300">
       <div className="container-luxe grid gap-10 py-16 md:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
           <div className="flex items-center gap-2">

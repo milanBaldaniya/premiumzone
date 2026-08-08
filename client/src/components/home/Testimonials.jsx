@@ -27,7 +27,7 @@ export default function Testimonials() {
   if (!isLoading && reviews.length === 0) return null;
 
   return (
-    <section className="relative overflow-hidden bg-dark-gradient py-20">
+    <section className="relative flex-1 overflow-hidden bg-dark-gradient py-20">
       <div className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
 
