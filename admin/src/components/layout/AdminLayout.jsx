@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Layout, Menu, Avatar, Dropdown, Button, Typography, Grid } from 'antd';
+import { Layout, Menu, Avatar, Dropdown, Button, Typography, Grid, Drawer } from 'antd';
 import {
   DashboardOutlined,
   ShoppingOutlined,
@@ -35,13 +35,56 @@ const MENU = [
   { key: '/settings', icon: <SettingOutlined />, label: 'Settings' },
 ];
 
+const Logo = ({ collapsed }) => (
+  <div
+    style={{
+      height: 64,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 10,
+      color: '#fff',
+    }}
+  >
+    <span
+      style={{
+        width: 34,
+        height: 34,
+        display: 'grid',
+        placeItems: 'center',
+        borderRadius: 9,
+        background: '#D4AF37',
+        color: '#0F172A',
+        fontWeight: 700,
+        fontFamily: 'Playfair Display, serif',
+      }}
+    >
+      P
+    </span>
+    {!collapsed && (
+      <span style={{ fontFamily: 'Playfair Display, serif', fontSize: 18, fontWeight: 700 }}>
+        Premium Zone
+      </span>
+    )}
+  </div>
+);
+
 export default function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const screens = useBreakpoint();
+  const isMobile = !screens.lg;
+
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Closing the drawer when the viewport grows past the breakpoint avoids it
+  // staying stuck open (as an overlay) once the desktop Sider takes over.
+  useEffect(() => {
+    if (!isMobile) setMobileOpen(false);
+  }, [isMobile]);
 
   // Highlight the closest matching top-level route
   const selectedKey =
@@ -54,56 +97,43 @@ export default function AdminLayout() {
     navigate('/login');
   };
 
+  const handleNavigate = (key) => {
+    navigate(key);
+    if (isMobile) setMobileOpen(false);
+  };
+
+  const menu = (
+    <Menu
+      theme="dark"
+      mode="inline"
+      selectedKeys={[selectedKey]}
+      onClick={({ key }) => handleNavigate(key)}
+      items={MENU}
+    />
+  );
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        trigger={null}
-        breakpoint="lg"
-        collapsedWidth={screens.lg ? 80 : 0}
-        onBreakpoint={(broken) => setCollapsed(broken)}
+      {/* Desktop: static in-flow sidebar */}
+      {!isMobile && (
+        <Sider collapsible collapsed={collapsed} trigger={null} width={240} collapsedWidth={80}>
+          <Logo collapsed={collapsed} />
+          {menu}
+        </Sider>
+      )}
+
+      {/* Mobile: overlay drawer, floats above content with a backdrop instead of squeezing it */}
+      <Drawer
+        placement="left"
+        closable={false}
+        onClose={() => setMobileOpen(false)}
+        open={isMobile && mobileOpen}
         width={240}
+        styles={{ body: { padding: 0, background: '#001529' } }}
       >
-        <div
-          style={{
-            height: 64,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 10,
-            color: '#fff',
-          }}
-        >
-          <span
-            style={{
-              width: 34,
-              height: 34,
-              display: 'grid',
-              placeItems: 'center',
-              borderRadius: 9,
-              background: '#D4AF37',
-              color: '#0F172A',
-              fontWeight: 700,
-              fontFamily: 'Playfair Display, serif',
-            }}
-          >
-            P
-          </span>
-          {!collapsed && (
-            <span style={{ fontFamily: 'Playfair Display, serif', fontSize: 18, fontWeight: 700 }}>
-              Premium Zone
-            </span>
-          )}
-        </div>
-        <Menu
-          theme="dark"
-          mode="inline"
-          selectedKeys={[selectedKey]}
-          onClick={({ key }) => navigate(key)}
-          items={MENU}
-        />
-      </Sider>
+        <Logo collapsed={false} />
+        {menu}
+      </Drawer>
 
       <Layout>
         <Header
@@ -117,8 +147,8 @@ export default function AdminLayout() {
         >
           <Button
             type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed((c) => !c)}
+            icon={collapsed || isMobile ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => (isMobile ? setMobileOpen((o) => !o) : setCollapsed((c) => !c))}
           />
           <Dropdown
             menu={{

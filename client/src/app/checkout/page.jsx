@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { FaMoneyBillWave, FaShieldAlt } from 'react-icons/fa';
+import { FaMoneyBillWave, FaWhatsapp, FaShieldAlt } from 'react-icons/fa';
 import { SiPhonepe, SiGooglepay } from 'react-icons/si';
 import { selectIsAuth, selectInitialized, selectUser } from '@/store/slices/authSlice';
 import {
@@ -16,10 +16,12 @@ import {
   useCreateRazorpayOrderMutation,
   useVerifyRazorpayPaymentMutation,
 } from '@/store/api/commerceApi';
+import { useGetPublicSettingsQuery } from '@/store/api/catalogApi';
 import Button from '@/components/ui/Button';
 import { Field } from '../login/page';
 import { formatPrice } from '@/lib/utils';
 import { buildAuthHref } from '@/lib/authRedirect';
+import { buildWhatsappLink } from '@/lib/whatsapp';
 import { loadRazorpayScript } from '@/lib/razorpay';
 
 export default function CheckoutPage() {
@@ -29,6 +31,7 @@ export default function CheckoutPage() {
   const user = useSelector(selectUser);
   const { data: cartData } = useGetCartQuery(undefined, { skip: !isAuth });
   const { data: addressData } = useGetAddressesQuery(undefined, { skip: !isAuth });
+  const { data: settingsData } = useGetPublicSettingsQuery();
   const [createAddress] = useCreateAddressMutation();
   const [placeOrder, { isLoading: placingCod }] = usePlaceOrderMutation();
   const [createRazorpayOrder] = useCreateRazorpayOrderMutation();
@@ -42,8 +45,16 @@ export default function CheckoutPage() {
 
   const placing = placingCod || payingOnline;
 
+  const lineItems = cartData?.data?.lineItems || [];
   const summary = cartData?.data?.summary || {};
   const addresses = addressData?.data || [];
+  const whatsappNumber = settingsData?.data?.store?.whatsapp;
+
+  // Products flagged "Advance Payment" by the admin skip Razorpay entirely — the whole
+  // order is routed through WhatsApp instead, since that's the only path they support.
+  const advanceItems = lineItems.filter((i) => i.paymentMethod === 'advance');
+  const requiresWhatsapp = advanceItems.length > 0;
+  const effectiveMethod = requiresWhatsapp ? 'whatsapp' : paymentMethod;
 
   useEffect(() => {
     if (initialized && !isAuth) router.replace(buildAuthHref('/login', { redirect: '/checkout' }));
@@ -62,6 +73,28 @@ export default function CheckoutPage() {
     }
   };
 
+  const buildOrderMessage = (address) => {
+    const lines = lineItems.map(
+      (item) => `• ${item.name} x${item.quantity} — ${formatPrice(item.subtotal)}`
+    );
+    const parts = [
+      "Hi! I'd like to place an order:",
+      '',
+      ...lines,
+      '',
+      `Subtotal: ${formatPrice(summary.itemsTotal)}`,
+    ];
+    if (summary.discountAmount > 0) parts.push(`Discount: − ${formatPrice(summary.discountAmount)}`);
+    parts.push(`Shipping: ${summary.shippingFee ? formatPrice(summary.shippingFee) : 'Free'}`);
+    if (summary.taxAmount > 0) parts.push(`Tax: ${formatPrice(summary.taxAmount)}`);
+    parts.push(`Total: ${formatPrice(summary.grandTotal)}`);
+    parts.push('');
+    parts.push('Shipping to:');
+    parts.push(`${address.fullName}, ${address.phone}`);
+    parts.push(`${address.line1}, ${address.city}, ${address.state} ${address.postalCode}, ${address.country}`);
+    return parts.join('\n');
+  };
+
   const handlePlaceOrder = async () => {
     const addressId = selectedAddress || addresses.find((a) => a.isDefault)?._id || addresses[0]?._id;
     if (!addressId) {
@@ -69,7 +102,18 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (paymentMethod === 'cod') {
+    if (effectiveMethod === 'whatsapp') {
+      const address = addresses.find((a) => a._id === addressId);
+      const href = buildWhatsappLink(whatsappNumber, buildOrderMessage(address));
+      if (!href) {
+        toast.error('WhatsApp ordering is not configured yet — please contact support');
+        return;
+      }
+      window.open(href, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    if (effectiveMethod === 'cod') {
       try {
         const res = await placeOrder({ addressId, paymentMethod: 'cod' }).unwrap();
         toast.success('Order placed successfully!');
@@ -215,52 +259,66 @@ export default function CheckoutPage() {
           {/* Payment method */}
           <section className="card-luxe p-6">
             <h2 className="mb-4 font-display text-xl font-bold text-primary">Payment Method</h2>
-            <div className="space-y-3">
-              <label
-                className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors ${
-                  paymentMethod === 'razorpay' ? 'border-accent bg-accent/5' : 'border-slate-200'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  checked={paymentMethod === 'razorpay'}
-                  onChange={() => setPaymentMethod('razorpay')}
-                  className="mt-1 accent-[#D4AF37]"
-                />
-                <div className="flex-1">
-                  <p className="font-semibold text-primary">Pay Online</p>
-                  <p className="text-sm text-slate-500">UPI, Cards, Netbanking &amp; Wallets — powered by Razorpay</p>
-                  <div className="mt-2 flex items-center gap-3 text-slate-400">
-                    <SiGooglepay size={26} className="text-slate-600" title="Google Pay" />
-                    <SiPhonepe size={20} className="text-[#5F259F]" title="PhonePe" />
-                    <span className="rounded border border-slate-200 px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-slate-500">
-                      UPI
-                    </span>
-                    <FaShieldAlt size={13} className="ml-auto text-accent-dark" title="Secured by Razorpay" />
-                  </div>
-                </div>
-              </label>
 
-              <label
-                className={`flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition-colors ${
-                  paymentMethod === 'cod' ? 'border-accent bg-accent/5' : 'border-slate-200'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  checked={paymentMethod === 'cod'}
-                  onChange={() => setPaymentMethod('cod')}
-                  className="accent-[#D4AF37]"
-                />
-                <FaMoneyBillWave className="text-slate-400" size={18} />
+            {requiresWhatsapp ? (
+              <div className="flex items-start gap-3 rounded-xl border border-[#25D366]/30 bg-[#25D366]/5 p-4">
+                <FaWhatsapp className="mt-0.5 shrink-0 text-[#25D366]" size={20} />
                 <div>
-                  <p className="font-semibold text-primary">Cash on Delivery</p>
-                  <p className="text-sm text-slate-500">Pay when your order arrives</p>
+                  <p className="font-semibold text-primary">Order via WhatsApp</p>
+                  <p className="mt-1 text-sm text-slate-500">
+                    {advanceItems.map((i) => i.name).join(', ')} require{advanceItems.length === 1 ? 's' : ''} advance
+                    payment — we&apos;ll open WhatsApp with your order details so we can confirm payment directly in chat.
+                  </p>
                 </div>
-              </label>
-            </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <label
+                  className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors ${
+                    paymentMethod === 'razorpay' ? 'border-accent bg-accent/5' : 'border-slate-200'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    checked={paymentMethod === 'razorpay'}
+                    onChange={() => setPaymentMethod('razorpay')}
+                    className="mt-1 accent-[#D4AF37]"
+                  />
+                  <div className="flex-1">
+                    <p className="font-semibold text-primary">Pay Online</p>
+                    <p className="text-sm text-slate-500">UPI, Cards, Netbanking &amp; Wallets — powered by Razorpay</p>
+                    <div className="mt-2 flex items-center gap-3 text-slate-400">
+                      <SiGooglepay size={26} className="text-slate-600" title="Google Pay" />
+                      <SiPhonepe size={20} className="text-[#5F259F]" title="PhonePe" />
+                      <span className="rounded border border-slate-200 px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-slate-500">
+                        UPI
+                      </span>
+                      <FaShieldAlt size={13} className="ml-auto text-accent-dark" title="Secured by Razorpay" />
+                    </div>
+                  </div>
+                </label>
+
+                <label
+                  className={`flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition-colors ${
+                    paymentMethod === 'cod' ? 'border-accent bg-accent/5' : 'border-slate-200'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    checked={paymentMethod === 'cod'}
+                    onChange={() => setPaymentMethod('cod')}
+                    className="accent-[#D4AF37]"
+                  />
+                  <FaMoneyBillWave className="text-slate-400" size={18} />
+                  <div>
+                    <p className="font-semibold text-primary">Cash on Delivery</p>
+                    <p className="text-sm text-slate-500">Pay when your order arrives</p>
+                  </div>
+                </label>
+              </div>
+            )}
           </section>
         </div>
 
@@ -279,8 +337,21 @@ export default function CheckoutPage() {
             <span className="font-display text-lg font-bold text-primary">Total</span>
             <span className="font-display text-lg font-bold text-primary">{formatPrice(summary.grandTotal)}</span>
           </div>
-          <Button variant="gold" onClick={handlePlaceOrder} loading={placing} className="w-full">
-            {paymentMethod === 'razorpay' ? `Pay ${formatPrice(summary.grandTotal)}` : 'Place Order'}
+          <Button
+            variant={effectiveMethod === 'whatsapp' ? undefined : 'gold'}
+            onClick={handlePlaceOrder}
+            loading={placing}
+            className={effectiveMethod === 'whatsapp' ? 'w-full !bg-[#25D366] !text-white hover:!bg-[#1ebe5b]' : 'w-full'}
+          >
+            {effectiveMethod === 'whatsapp' ? (
+              <>
+                <FaWhatsapp size={18} /> Continue on WhatsApp
+              </>
+            ) : effectiveMethod === 'razorpay' ? (
+              `Pay ${formatPrice(summary.grandTotal)}`
+            ) : (
+              'Place Order'
+            )}
           </Button>
         </aside>
       </div>

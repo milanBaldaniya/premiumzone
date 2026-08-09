@@ -36,6 +36,13 @@ export default function Settings() {
               <Form.Item name={['store', 'tagline']} label="Tagline"><Input /></Form.Item>
               <Form.Item name={['store', 'email']} label="Contact Email"><Input /></Form.Item>
               <Form.Item name={['store', 'phone']} label="Contact Phone"><Input /></Form.Item>
+              <Form.Item
+                name={['store', 'whatsapp']}
+                label="WhatsApp Number"
+                extra="Country code + number, digits only (e.g. 919876543210). Powers the 'Order via WhatsApp' buttons on the storefront."
+              >
+                <Input placeholder="919876543210" />
+              </Form.Item>
               <Form.Item name={['store', 'currency']} label="Currency"><Input /></Form.Item>
             </Card>
           </Col>

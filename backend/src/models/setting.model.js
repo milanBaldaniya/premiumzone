@@ -16,6 +16,8 @@ const settingSchema = new Schema(
       favicon: { url: String, publicId: String },
       email: String,
       phone: String,
+      // Business WhatsApp number for "chat to order" — digits only, with country code (e.g. 919876543210)
+      whatsapp: String,
       address: String,
       currency: { type: String, default: 'INR' },
       currencySymbol: { type: String, default: '₹' },

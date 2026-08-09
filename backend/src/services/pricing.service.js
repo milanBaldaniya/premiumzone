@@ -52,6 +52,7 @@ export const buildLineItems = async (items = []) => {
       price,
       quantity: item.quantity,
       subtotal,
+      paymentMethod: product.paymentMethod,
     };
   });
 

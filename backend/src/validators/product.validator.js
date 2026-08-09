@@ -45,6 +45,7 @@ export const createProductSchema = z.object({
   isNewArrival: z.boolean().optional(),
   isBestSeller: z.boolean().optional(),
   status: z.enum(Object.values(PRODUCT_STATUS)).optional(),
+  paymentMethod: z.enum(['online', 'advance']).optional(),
   seo: z
     .object({
       metaTitle: z.string().optional(),

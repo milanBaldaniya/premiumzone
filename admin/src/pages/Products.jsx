@@ -8,6 +8,8 @@ const { Title } = Typography;
 
 const STATUS_COLORS = { active: 'green', draft: 'orange', archived: 'default' };
 const GENDER_LABELS = { men: 'Men', women: 'Women', unisex: 'Unisex' };
+const PAYMENT_METHOD_LABELS = { online: 'Online (Razorpay)', advance: 'Advance (WhatsApp)' };
+const PAYMENT_METHOD_COLORS = { online: 'gold', advance: 'green' };
 
 export default function Products() {
   const navigate = useNavigate();
@@ -78,6 +80,11 @@ export default function Products() {
     },
     { title: 'Status', dataIndex: 'status', render: (s) => <Tag color={STATUS_COLORS[s]}>{s}</Tag> },
     {
+      title: 'Payment',
+      dataIndex: 'paymentMethod',
+      render: (pm) => <Tag color={PAYMENT_METHOD_COLORS[pm] || 'gold'}>{PAYMENT_METHOD_LABELS[pm] || PAYMENT_METHOD_LABELS.online}</Tag>,
+    },
+    {
       title: 'Actions',
       render: (_, row) => (
         <Space>
@@ -114,7 +121,7 @@ export default function Products() {
         columns={columns}
         dataSource={products}
         loading={isFetching}
-        scroll={{ x: 800 }}
+        scroll={{ x: 950 }}
         pagination={{
           current: meta.page,
           total: meta.total,

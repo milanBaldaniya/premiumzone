@@ -82,6 +82,17 @@ const productSchema = new Schema(
       index: true,
     },
 
+    // Which checkout flow this product supports — distinct from Order.paymentMethod,
+    // which records how a placed order was actually paid.
+    //   online:   customer pays via Razorpay (UPI/cards/etc.) and the order is
+    //             confirmed automatically after successful payment.
+    //   advance:  customer is routed to WhatsApp to arrange payment/order directly.
+    paymentMethod: {
+      type: String,
+      enum: ['online', 'advance'],
+      default: 'online',
+    },
+
     seo: {
       metaTitle: String,
       metaDescription: String,

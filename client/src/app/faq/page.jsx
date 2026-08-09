@@ -12,7 +12,7 @@ const FAQS = [
   },
   {
     q: 'What payment methods do you accept?',
-    a: 'We accept Cash on Delivery and online payments via Razorpay — including UPI (GPay, PhonePe & more), credit/debit cards, netbanking, and wallets.',
+    a: 'You can order directly via WhatsApp — we\'ll confirm your order and payment details in chat — or choose Cash on Delivery at checkout.',
   },
   {
     q: 'How long does shipping take?',

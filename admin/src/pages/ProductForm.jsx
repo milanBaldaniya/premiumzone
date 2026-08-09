@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  Form, Input, InputNumber, Select, Switch, Button, Card, Row, Col, Typography, Space, App, Spin,
+  Form, Input, InputNumber, Select, Switch, Button, Card, Row, Col, Typography, Space, App, Spin, Tooltip,
 } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, ReloadOutlined } from '@ant-design/icons';
 import {
   useGetProductQuery,
   useCreateProductMutation,
@@ -15,6 +15,18 @@ import ImageUploader from '../components/ImageUploader';
 
 const { Title } = Typography;
 const { TextArea } = Input;
+
+// e.g. ("Rolex", "Submariner Date") -> "ROLEX-SUBMARINER-DATE-4F2A"
+const generateSku = (brandName, productName) => {
+  const slug = (s) =>
+    (s || '')
+      .toUpperCase()
+      .replace(/[^A-Z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  const base = [slug(brandName), slug(productName)].filter(Boolean).join('-');
+  const suffix = Math.random().toString(36).slice(2, 6).toUpperCase();
+  return base ? `${base}-${suffix}` : suffix;
+};
 
 export default function ProductForm() {
   const { id } = useParams();
@@ -30,6 +42,9 @@ export default function ProductForm() {
   const [updateProduct, { isLoading: updating }] = useUpdateProductMutation();
 
   const [gallery, setGallery] = useState([]);
+  // Once the admin manually edits the SKU (or we're editing an existing product),
+  // stop silently overwriting it as they keep typing the name/brand.
+  const [skuTouched, setSkuTouched] = useState(isEdit);
 
   useEffect(() => {
     if (productData?.data) {
@@ -42,6 +57,20 @@ export default function ProductForm() {
       setGallery(p.gallery?.length ? p.gallery : [p.thumbnail].filter(Boolean));
     }
   }, [productData, form]);
+
+  const regenerateSku = () => {
+    const brandName = brandsData?.data?.find((b) => b._id === form.getFieldValue('brand'))?.name;
+    form.setFieldValue('sku', generateSku(brandName, form.getFieldValue('name')));
+  };
+
+  const handleValuesChange = (changed) => {
+    if (skuTouched) return;
+    if (!('name' in changed) && !('brand' in changed)) return;
+    const brandName = brandsData?.data?.find((b) => b._id === form.getFieldValue('brand'))?.name;
+    const name = form.getFieldValue('name');
+    if (!brandName && !name) return;
+    form.setFieldValue('sku', generateSku(brandName, name));
+  };
 
   const onFinish = async (rawValues) => {
     // Derive thumbnail (first image) + gallery from the uploader
@@ -81,7 +110,8 @@ export default function ProductForm() {
         form={form}
         layout="vertical"
         onFinish={onFinish}
-        initialValues={{ status: 'active', stock: 0, price: 0, currency: 'INR', gender: 'unisex' }}
+        onValuesChange={handleValuesChange}
+        initialValues={{ status: 'active', stock: 0, price: 0, currency: 'INR', gender: 'unisex', paymentMethod: 'online' }}
       >
         <Row gutter={16}>
           <Col xs={24} lg={16}>
@@ -89,8 +119,16 @@ export default function ProductForm() {
               <Form.Item name="name" label="Product Name" rules={[{ required: true }]}>
                 <Input placeholder="Rolex Submariner Date" />
               </Form.Item>
-              <Form.Item name="sku" label="SKU" rules={[{ required: true }]}>
-                <Input placeholder="ROLEX-SUB-126610" />
+              <Form.Item name="sku" label="SKU" rules={[{ required: true }]} extra="Auto-generated from brand + name — edit anytime.">
+                <Input
+                  placeholder="ROLEX-SUB-126610"
+                  onChange={() => setSkuTouched(true)}
+                  suffix={
+                    <Tooltip title="Regenerate">
+                      <ReloadOutlined onClick={regenerateSku} style={{ cursor: 'pointer', color: '#8c8c8c' }} />
+                    </Tooltip>
+                  }
+                />
               </Form.Item>
               <Form.Item name="shortDescription" label="Short Description">
                 <Input placeholder="One-line summary" maxLength={300} />
@@ -164,6 +202,19 @@ export default function ProductForm() {
                     { value: 'active', label: 'Active' },
                     { value: 'draft', label: 'Draft' },
                     { value: 'archived', label: 'Archived' },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item
+                name="paymentMethod"
+                label="Payment Method"
+                rules={[{ required: true }]}
+                extra="Advance Payment skips Razorpay and sends the customer to WhatsApp to order/pay directly."
+              >
+                <Select
+                  options={[
+                    { value: 'online', label: 'Online Payment (Razorpay)' },
+                    { value: 'advance', label: 'Advance Payment (WhatsApp)' },
                   ]}
                 />
               </Form.Item>
