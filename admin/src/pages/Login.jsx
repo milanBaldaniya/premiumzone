@@ -82,10 +82,6 @@ export default function Login() {
             Sign In
           </Button>
         </Form>
-
-        <Text type="secondary" style={{ display: 'block', marginTop: 16, fontSize: 12, textAlign: 'center' }}>
-          Default: admin@luxe.com / Admin@1234
-        </Text>
       </Card>
     </div>
   );
