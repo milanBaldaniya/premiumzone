@@ -11,7 +11,7 @@ import {
 } from '@/store/api/commerceApi';
 import AccountShell from '@/components/account/AccountShell';
 import Button from '@/components/ui/Button';
-import { Field } from '../../login/page';
+import { Field } from '@/components/auth/Field';
 
 export default function AddressesPage() {
   const { data } = useGetAddressesQuery();

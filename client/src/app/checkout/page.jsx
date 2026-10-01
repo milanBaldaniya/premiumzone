@@ -18,7 +18,7 @@ import {
 } from '@/store/api/commerceApi';
 import { useGetPublicSettingsQuery } from '@/store/api/catalogApi';
 import Button from '@/components/ui/Button';
-import { Field } from '../login/page';
+import { Field } from '@/components/auth/Field';
 import { formatPrice } from '@/lib/utils';
 import { buildAuthHref } from '@/lib/authRedirect';
 import { buildWhatsappLink } from '@/lib/whatsapp';

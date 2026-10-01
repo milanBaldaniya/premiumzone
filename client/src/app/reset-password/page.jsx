@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useResetPasswordMutation } from '@/store/api/authApi';
 import Button from '@/components/ui/Button';
-import { AuthShell, Field } from '../login/page';
+import { AuthShell, Field } from '@/components/auth/AuthShell';
 
 function ResetForm() {
   const router = useRouter();

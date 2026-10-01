@@ -28,7 +28,13 @@ const envSchema = z.object({
   JWT_RESET_SECRET: z.string().min(1),
   COOKIE_SECRET: z.string().min(1),
 
-  GOOGLE_CLIENT_ID: z.string().optional(),
+  // Google Sign-In (via Firebase Auth) — the Firebase Admin SDK service account
+  // used to verify Firebase ID tokens the client sends. FIREBASE_SERVICE_ACCOUNT_JSON
+  // (the whole key file's contents, e.g. for Render/other hosts with no file
+  // upload) takes priority when set; FIREBASE_SERVICE_ACCOUNT_PATH (a local
+  // file path, for local dev) is the fallback.
+  FIREBASE_SERVICE_ACCOUNT_JSON: z.string().optional(),
+  FIREBASE_SERVICE_ACCOUNT_PATH: z.string().optional(),
 
   // Seed credentials (used by `npm run seed`)
   SUPER_ADMIN_NAME: z.string().default('Super Admin'),

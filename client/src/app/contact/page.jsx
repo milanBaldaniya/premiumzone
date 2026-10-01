@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock } from 'react-icons/fa';
 import PageHero from '@/components/layout/PageHero';
 import Button from '@/components/ui/Button';
-import { Field } from '../login/page';
+import { Field } from '@/components/auth/Field';
 
 const INFO = [
   { icon: FaMapMarkerAlt, label: 'Visit Us', value: '5th Avenue, New York, NY 10001' },

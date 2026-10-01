@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { FaCheckCircle, FaTimesCircle, FaSpinner } from 'react-icons/fa';
 import { useVerifyEmailMutation } from '@/store/api/authApi';
-import { AuthShell } from '../login/page';
+import { AuthShell } from '@/components/auth/AuthShell';
 
 function VerifyContent() {
   const token = useSearchParams().get('token');

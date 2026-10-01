@@ -1,6 +1,7 @@
-import { OAuth2Client } from 'google-auth-library';
 import User from '../models/user.model.js';
 import { env } from '../config/env.js';
+import { getFirebaseAuth } from '../config/firebase.js';
+import { logger } from '../config/logger.js';
 import { ApiError } from '../utils/ApiError.js';
 import { TOKEN_TYPE } from '../constants/index.js';
 import {
@@ -13,8 +14,6 @@ import {
   sendVerificationEmail,
   sendPasswordResetEmail,
 } from './email.service.js';
-
-const googleClient = env.GOOGLE_CLIENT_ID ? new OAuth2Client(env.GOOGLE_CLIENT_ID) : null;
 
 /** Registers a local user and dispatches a verification email. */
 export const registerUser = async ({ name, email, password, phone }) => {
@@ -49,32 +48,55 @@ export const loginUser = async ({ email, password }) => {
   return { user, tokens };
 };
 
-/** Verifies a Google ID token and finds-or-creates the account. */
+/**
+ * Verifies a Firebase ID token (issued after the client signs the user in to
+ * Firebase with their Google credential) via the Firebase Admin SDK, then
+ * finds-or-creates the account. Matches by firebaseUid first, falling back to
+ * email so a customer who previously signed in another way gets linked, not
+ * duplicated.
+ */
 export const googleLogin = async (idToken) => {
-  if (!googleClient) throw ApiError.internal('Google login is not configured');
+  if (!env.FIREBASE_SERVICE_ACCOUNT_JSON && !env.FIREBASE_SERVICE_ACCOUNT_PATH) {
+    throw ApiError.internal('Google login is not configured');
+  }
 
-  const ticket = await googleClient.verifyIdToken({
-    idToken,
-    audience: env.GOOGLE_CLIENT_ID,
-  });
-  const payload = ticket.getPayload();
-  if (!payload?.email) throw ApiError.unauthorized('Invalid Google token');
+  let decoded;
+  try {
+    decoded = await getFirebaseAuth().verifyIdToken(idToken);
+  } catch (err) {
+    logger.error(`Firebase token verification failed: ${err.message}`);
+    throw ApiError.unauthorized('Invalid Google sign-in token');
+  }
+  if (!decoded.email || !decoded.email_verified) {
+    throw ApiError.unauthorized('Google account email is not verified');
+  }
 
-  let user = await User.findOne({ email: payload.email });
+  let user = await User.findOne({ $or: [{ firebaseUid: decoded.uid }, { email: decoded.email }] });
   if (!user) {
     user = await User.create({
-      name: payload.name || payload.email.split('@')[0],
-      email: payload.email,
+      name: decoded.name || decoded.email.split('@')[0],
+      email: decoded.email,
       provider: 'google',
-      googleId: payload.sub,
+      firebaseUid: decoded.uid,
       isEmailVerified: true,
-      avatar: payload.picture ? { url: payload.picture } : undefined,
+      avatar: decoded.picture ? { url: decoded.picture } : undefined,
     });
-  } else if (user.provider === 'local' && !user.googleId) {
-    user.googleId = payload.sub;
-    user.isEmailVerified = true;
-    await user.save({ validateBeforeSave: false });
+  } else {
+    // Backfill Google fields on an account first seen via another channel.
+    let changed = false;
+    if (!user.firebaseUid) {
+      user.firebaseUid = decoded.uid;
+      user.isEmailVerified = true;
+      changed = true;
+    }
+    if (!user.avatar?.url && decoded.picture) {
+      user.avatar = { url: decoded.picture };
+      changed = true;
+    }
+    if (changed) await user.save({ validateBeforeSave: false });
   }
+
+  if (!user.isActive) throw ApiError.forbidden('Account is deactivated');
 
   const tokens = generateAuthTokens(user);
   return { user, tokens };

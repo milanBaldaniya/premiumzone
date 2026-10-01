@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useForgotPasswordMutation } from '@/store/api/authApi';
 import Button from '@/components/ui/Button';
-import { AuthShell, Field } from '../login/page';
+import { AuthShell, Field } from '@/components/auth/AuthShell';
 
 export default function ForgotPasswordPage() {
   const [forgotPassword] = useForgotPasswordMutation();

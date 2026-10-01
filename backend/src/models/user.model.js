@@ -34,6 +34,9 @@ const userSchema = new Schema(
     },
     provider: { type: String, enum: ['local', 'google'], default: 'local' },
     googleId: { type: String, index: true, sparse: true },
+    // Firebase Auth uid — set once the account signs in via Google Sign-In
+    // (verified through the Firebase Admin SDK; see auth.service.js).
+    firebaseUid: { type: String, index: true, sparse: true },
 
     isEmailVerified: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },

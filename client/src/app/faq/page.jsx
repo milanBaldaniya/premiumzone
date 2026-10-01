@@ -15,12 +15,12 @@ const FAQS = [
     a: 'You can order directly via WhatsApp — we\'ll confirm your order and payment details in chat — or choose Cash on Delivery at checkout.',
   },
   {
-    q: 'How long does shipping take?',
-    a: 'Orders are processed within 1–2 business days. Standard delivery takes 3–7 business days depending on your location. Free shipping applies to orders over ₹500.',
+    q: 'How do I apply a discount coupon?',
+    a: 'Enter your coupon code in the "Coupon code" field in your cart and click Apply — the discount is calculated automatically and carries through to checkout.',
   },
   {
-    q: 'What is your return policy?',
-    a: 'We offer a 30-day return policy on eligible items in their original, unworn condition with all packaging and documentation. Contact our concierge to initiate a return.',
+    q: 'How long does shipping take?',
+    a: 'Orders are processed within 1–2 business days. Standard delivery takes 3–7 business days depending on your location. Free shipping applies to orders over ₹500.',
   },
   {
     q: 'Do you offer international shipping?',
@@ -29,6 +29,22 @@ const FAQS = [
   {
     q: 'How do I track my order?',
     a: 'Once your order ships, you can track it from your account under "Orders". You will also receive email updates at each stage of delivery.',
+  },
+  {
+    q: 'Can I cancel my order?',
+    a: 'Yes — you can cancel an order from your account as long as it hasn\'t been packed or shipped yet. Once it\'s on its way, get in touch with our concierge team and we\'ll do our best to help.',
+  },
+  {
+    q: 'What is your return policy?',
+    a: 'We offer a 30-day return policy on eligible items in their original, unworn condition with all packaging and documentation. Contact our concierge to initiate a return.',
+  },
+  {
+    q: 'Can I change my delivery address after placing an order?',
+    a: 'Address changes are only possible before an order ships. Contact our concierge team as soon as possible and we\'ll update it if the order hasn\'t left our hands yet.',
+  },
+  {
+    q: 'Why is my order delayed?',
+    a: 'Delays can occasionally happen due to high demand, courier disruptions or address verification. We\'ll keep you posted by email at every stage — reach out to us anytime for a status update.',
   },
   {
     q: 'Is my personal information secure?',
