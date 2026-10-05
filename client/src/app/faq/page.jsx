@@ -19,32 +19,44 @@ const FAQS = [
     a: 'Enter your coupon code in the "Coupon code" field in your cart and click Apply — the discount is calculated automatically and carries through to checkout.',
   },
   {
-    q: 'How long does shipping take?',
-    a: 'Orders are processed within 1–2 business days. Standard delivery takes 3–7 business days depending on your location. Free shipping applies to orders over ₹500.',
+    q: 'Where is my order?',
+    a: 'You can track your order using the tracking link we send once it ships. You can also check your order status anytime from My Account → Orders.',
+  },
+  {
+    q: 'How can I track my order?',
+    a: 'Once your order is shipped, you\'ll receive a tracking link through email or WhatsApp. Use that link to view the latest shipment status.',
+  },
+  {
+    q: 'How long will it take to receive my order?',
+    a: 'Delivery time depends on your location and the courier service — orders are typically processed within 1–2 business days, with delivery in 3–7 business days. An estimated delivery date is shown at checkout and in your shipping confirmation. Free shipping applies to orders over ₹500.',
+  },
+  {
+    q: 'Do you offer Cash on Delivery (COD)?',
+    a: 'Yes — Cash on Delivery is available for most products and locations. COD availability is confirmed automatically at checkout based on your delivery address.',
   },
   {
     q: 'Do you offer international shipping?',
     a: 'Yes — we ship to over 40 countries with secure, insured delivery. Customs duties and taxes may apply based on your destination.',
   },
   {
-    q: 'How do I track my order?',
-    a: 'Once your order ships, you can track it from your account under "Orders". You will also receive email updates at each stage of delivery.',
+    q: 'Can I cancel my order?',
+    a: 'You can request a cancellation any time before your order is shipped, either from My Account → Orders or by contacting our concierge team. Once an order has shipped, cancellation may no longer be possible.',
   },
   {
-    q: 'Can I cancel my order?',
-    a: 'Yes — you can cancel an order from your account as long as it hasn\'t been packed or shipped yet. Once it\'s on its way, get in touch with our concierge team and we\'ll do our best to help.',
+    q: 'Can I change my delivery address after placing an order?',
+    a: 'If your order hasn\'t shipped yet, contact our concierge team as soon as possible and we\'ll update the address for you. Address changes aren\'t possible once an order has shipped.',
+  },
+  {
+    q: 'Why hasn\'t my tracking information been updated?',
+    a: 'Tracking updates can sometimes take a little time to appear after a shipment is picked up or moved between courier facilities. Please allow some time for the next update before reaching out.',
   },
   {
     q: 'What is your return policy?',
     a: 'We offer a 30-day return policy on eligible items in their original, unworn condition with all packaging and documentation. Contact our concierge to initiate a return.',
   },
   {
-    q: 'Can I change my delivery address after placing an order?',
-    a: 'Address changes are only possible before an order ships. Contact our concierge team as soon as possible and we\'ll update it if the order hasn\'t left our hands yet.',
-  },
-  {
-    q: 'Why is my order delayed?',
-    a: 'Delays can occasionally happen due to high demand, courier disruptions or address verification. We\'ll keep you posted by email at every stage — reach out to us anytime for a status update.',
+    q: 'How can I contact you about my order?',
+    a: 'Reach our concierge team at premiumproductszone353@gmail.com or +91 82388 00920, or use the form on our Contact page, and we\'ll get back to you as soon as possible.',
   },
   {
     q: 'Is my personal information secure?',
