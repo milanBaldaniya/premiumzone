@@ -10,7 +10,7 @@ const settingSchema = new Schema(
   {
     key: { type: String, default: 'global', unique: true },
     store: {
-      name: { type: String, default: 'Premium Zone' },
+      name: { type: String, default: 'Premium Product Zone' },
       tagline: { type: String, default: 'Precision. Prestige. Perfection.' },
       logo: { url: String, publicId: String },
       favicon: { url: String, publicId: String },

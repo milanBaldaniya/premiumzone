@@ -38,7 +38,7 @@ const wrap = (heading, body, cta) => `
       }
     </div>
     <div style="padding:20px 32px;color:#94a3b8;font-size:12px;border-top:1px solid #e2e8f0">
-      © ${new Date().getFullYear()} Premium Zone. All rights reserved.
+      © ${new Date().getFullYear()} Premium Product Zone. All rights reserved.
     </div>
   </div>`;
 

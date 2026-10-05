@@ -53,7 +53,7 @@ const envSchema = z.object({
   SMTP_PORT: z.coerce.number().optional(),
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
-  MAIL_FROM: z.string().default('Premium Zone <no-reply@premiumzone.com>'),
+  MAIL_FROM: z.string().default('Premium Product Zone <no-reply@premiumzone.com>'),
 
   REDIS_URL: z.string().optional().or(z.literal('')),
 

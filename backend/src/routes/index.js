@@ -21,7 +21,7 @@ import analyticsRoutes from './analytics.routes.js';
 const router = Router();
 
 router.get('/', (_req, res) =>
-  res.json({ success: true, message: 'Premium Zone API v1', docs: '/api/v1/docs' })
+  res.json({ success: true, message: 'Premium Product Zone API v1', docs: '/api/v1/docs' })
 );
 
 router.use('/auth', authRoutes);

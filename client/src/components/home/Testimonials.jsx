@@ -36,7 +36,7 @@ export default function Testimonials() {
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Testimonials</span>
           <h2 className="mt-2 font-display text-3xl font-bold text-white sm:text-4xl">What Our Customers Say</h2>
           <p className="mx-auto mt-3 max-w-lg text-sm text-slate-400">
-            Real experiences from collectors and enthusiasts who trust Premium Zone.
+            Real experiences from collectors and enthusiasts who trust Premium Product Zone.
           </p>
         </div>
 

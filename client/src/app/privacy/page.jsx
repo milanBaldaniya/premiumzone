@@ -2,53 +2,56 @@ import LegalPage from '@/components/layout/LegalPage';
 
 export const metadata = {
   title: 'Privacy Policy',
-  description: 'How Premium Zone collects, uses and protects your personal information.',
+  description: 'How Premium Product Zone collects, uses and protects your personal information.',
 };
 
 const SECTIONS = [
   {
     heading: 'Information We Collect',
     body: [
-      'We collect information you provide directly, such as your name, email address, phone number, shipping and billing addresses, and order history when you create an account or place an order.',
-      'We also automatically collect certain technical data, including your IP address, browser type, and browsing behavior, to improve our services and personalize your experience.',
+      'We collect personal details such as your name, email address, contact number, and other information which you provide when using our services or registering on our platform.',
     ],
   },
   {
     heading: 'How We Use Your Information',
     body: [
-      'Your information is used to process orders, deliver products, provide customer support, send transactional emails (such as order confirmations and shipping updates), and — with your consent — marketing communications.',
-      'We may also use aggregated, anonymized data for analytics and to enhance our product offerings.',
+      'We use your information to improve our services, respond to inquiries, send transactional emails, and inform you about updates and offers.',
     ],
   },
   {
     heading: 'Data Security',
     body: [
-      'We implement industry-standard security measures including encryption, secure httpOnly cookies for authentication, and password hashing. Payment details are never stored on our servers.',
-      'While we take reasonable steps to protect your data, no method of transmission over the internet is completely secure.',
+      'We implement appropriate security measures to protect your data from unauthorized access, alteration, disclosure, or destruction.',
     ],
   },
   {
-    heading: 'Cookies',
+    heading: 'Cookies and Tracking',
     body: [
-      'We use cookies to keep you signed in, remember your preferences, and understand how you use our site. You can control cookies through your browser settings, though disabling them may affect functionality.',
+      'We may use cookies and similar tracking technologies to enhance your experience. You can control cookies through your browser settings.',
     ],
   },
   {
     heading: 'Third-Party Services',
     body: [
-      'We work with trusted third parties for payment processing, image hosting (Cloudinary), email delivery, and analytics. These providers only receive the information necessary to perform their services.',
+      'We may work with third-party vendors who assist in delivering our services. They are required to protect your data and use it only for authorized purposes.',
     ],
   },
   {
     heading: 'Your Rights',
     body: [
-      'You may access, update or delete your personal information at any time through your account settings, or by contacting our support team. You may also opt out of marketing communications at any time.',
+      'You have the right to access, correct, or delete your personal information. You can also opt out of promotional communications at any time.',
+    ],
+  },
+  {
+    heading: 'Changes to This Policy',
+    body: [
+      'We may update this Privacy Policy from time to time. The updated version will be posted on this page with the revised date.',
     ],
   },
   {
     heading: 'Contact Us',
     body: [
-      'If you have any questions about this Privacy Policy or how we handle your data, please reach out to us at privacy@premiumzone.com.',
+      'If you have any questions or concerns about our Privacy Policy, feel free to contact us at premiumproductszone353@gmail.com or call +91 82388 00920.',
     ],
   },
 ];

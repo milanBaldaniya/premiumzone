@@ -4,7 +4,7 @@ import PageHero from '@/components/layout/PageHero';
 
 export const metadata = {
   title: 'About Us',
-  description: 'The story behind Premium Zone — curators of luxury watches and premium gadgets.',
+  description: 'The story behind Premium Product Zone — curators of luxury watches and premium gadgets.',
 };
 
 const VALUES = [
@@ -27,7 +27,7 @@ export default function AboutPage() {
       <PageHero
         eyebrow="Our Story"
         title="Crafted for Those Who Value Time"
-        subtitle="Premium Zone was born from a passion for horological artistry and cutting-edge technology."
+        subtitle="Premium Product Zone was born from a passion for horological artistry and cutting-edge technology."
       />
 
       <section className="container-luxe py-16">

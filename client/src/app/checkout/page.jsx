@@ -138,7 +138,7 @@ export default function CheckoutPage() {
         order_id: rpOrder.razorpayOrderId,
         amount: rpOrder.amount,
         currency: rpOrder.currency,
-        name: 'Premium Zone',
+        name: 'Premium Product Zone',
         description: 'Order payment',
         image: '/favicon.ico',
         prefill: {

@@ -59,7 +59,7 @@ function LoginForm() {
         /* fall through to plain welcome */
       }
     }
-    toast.success('Welcome to Premium Zone!');
+    toast.success('Welcome to Premium Product Zone!');
   };
 
   const finishUp = async () => {
@@ -165,12 +165,12 @@ function SignInStep({ googleButton }) {
             transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
             className="absolute inset-0 rounded-full bg-accent/50 blur-xl"
           />
-          <div className="relative grid h-20 w-20 place-items-center rounded-full bg-gold-gradient font-display text-3xl font-bold text-primary shadow-gold ring-4 ring-accent/10">
-            P
+          <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-black p-2.5 shadow-gold ring-4 ring-accent/10">
+            <img src="/logo-icon.png" alt="Premium Product Zone" className="h-full w-full object-contain" />
           </div>
         </div>
 
-        <h1 className="mt-6 font-display text-3xl font-bold text-primary sm:text-4xl">Premium Zone</h1>
+        <h1 className="mt-6 font-display text-2xl font-bold text-primary sm:text-3xl">Premium Product Zone</h1>
         <p className="mx-auto mt-3 max-w-xs text-sm leading-relaxed text-slate-500">
           Sign in with Google to unlock curated luxury watches and premium gadgets.
         </p>
@@ -193,7 +193,7 @@ function SignInStep({ googleButton }) {
       </div>
 
       <p className="mt-8 text-center text-xs leading-relaxed text-slate-400">
-        By continuing, you agree to Premium Zone&apos;s{' '}
+        By continuing, you agree to Premium Product Zone&apos;s{' '}
         <Link href="/terms" className="font-medium text-accent-dark hover:underline">
           Terms of Service
         </Link>{' '}

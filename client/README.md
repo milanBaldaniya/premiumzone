@@ -1,4 +1,4 @@
-# Premium Zone — Client (Next.js)
+# Premium Product Zone — Client (Next.js)
 
 Customer-facing storefront for luxury watches & premium gadgets.
 **Next.js 15 (App Router)** in plain JavaScript — no TypeScript.

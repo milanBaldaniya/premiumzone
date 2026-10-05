@@ -48,22 +48,27 @@ const Logo = ({ collapsed }) => (
   >
     <span
       style={{
-        width: 34,
-        height: 34,
-        display: 'grid',
-        placeItems: 'center',
+        width: 36,
+        height: 36,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         borderRadius: 9,
-        background: '#D4AF37',
-        color: '#0F172A',
-        fontWeight: 700,
-        fontFamily: 'Playfair Display, serif',
+        background: '#000000',
+        overflow: 'hidden',
+        padding: 4,
+        flexShrink: 0,
       }}
     >
-      P
+      <img
+        src="/logo-icon.png"
+        alt="Premium Product Zone"
+        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+      />
     </span>
     {!collapsed && (
-      <span style={{ fontFamily: 'Playfair Display, serif', fontSize: 18, fontWeight: 700 }}>
-        Premium Zone
+      <span style={{ fontFamily: 'Playfair Display, serif', fontSize: 16, fontWeight: 700 }}>
+        Premium Product Zone
       </span>
     )}
   </div>

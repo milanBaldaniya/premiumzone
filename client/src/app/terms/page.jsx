@@ -2,59 +2,51 @@ import LegalPage from '@/components/layout/LegalPage';
 
 export const metadata = {
   title: 'Terms & Conditions',
-  description: 'The terms governing your use of Premium Zone and purchases made through our store.',
+  description: 'The terms governing your use of Premium Product Zone and purchases made through our store.',
 };
 
 const SECTIONS = [
   {
-    heading: 'Acceptance of Terms',
+    heading: 'Use of the Site',
     body: [
-      'By accessing or using Premium Zone, you agree to be bound by these Terms & Conditions and our Privacy Policy. If you do not agree, please do not use our services.',
-    ],
-  },
-  {
-    heading: 'Accounts',
-    body: [
-      'You are responsible for maintaining the confidentiality of your account credentials and for all activity under your account. You must provide accurate and complete information when registering.',
-      'We reserve the right to suspend or terminate accounts that violate these terms or engage in fraudulent activity.',
-    ],
-  },
-  {
-    heading: 'Products & Pricing',
-    body: [
-      'We strive to display accurate product descriptions, images and prices. However, we do not warrant that all content is error-free. In the event of a pricing error, we reserve the right to cancel any affected orders.',
-      'All prices are listed in the store currency and are subject to change without notice.',
-    ],
-  },
-  {
-    heading: 'Orders & Payment',
-    body: [
-      'Placing an order constitutes an offer to purchase. We reserve the right to accept or decline any order. Cash on Delivery is currently available; additional payment methods will be added over time.',
-      'Order confirmation does not guarantee product availability. If an item becomes unavailable, we will notify you and issue a refund where applicable.',
-    ],
-  },
-  {
-    heading: 'Shipping & Returns',
-    body: [
-      'Delivery times are estimates and not guaranteed. Risk of loss passes to you upon delivery. Eligible items may be returned within 30 days in their original condition, subject to our return policy.',
+      'By accessing and using this website, you agree to be bound by the following terms and conditions. If you do not agree with any part of these terms, please do not use our website.',
+      'You must be at least 18 years old to use this site. The content provided is for general information only and may be subject to change without notice.',
     ],
   },
   {
     heading: 'Intellectual Property',
     body: [
-      'All content on this site — including logos, text, images and design — is the property of Premium Zone or its licensors and is protected by intellectual property laws. You may not reproduce it without permission.',
+      'All content, including images, logos, and text, are the property of Premium Product Zone unless otherwise stated. Unauthorized use may lead to legal action.',
+    ],
+  },
+  {
+    heading: 'User Accounts',
+    body: [
+      'If you create an account, you are responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account.',
+    ],
+  },
+  {
+    heading: 'Orders & Payments',
+    body: [
+      'All purchases made through the site are subject to availability and confirmation of the order. We reserve the right to refuse or cancel any order at our discretion.',
     ],
   },
   {
     heading: 'Limitation of Liability',
     body: [
-      'To the fullest extent permitted by law, Premium Zone shall not be liable for any indirect, incidental or consequential damages arising from your use of our services or products.',
+      'We shall not be held liable for any indirect, incidental, or consequential damages arising from the use of our website or services.',
     ],
   },
   {
-    heading: 'Changes to These Terms',
+    heading: 'Modifications',
     body: [
-      'We may update these Terms from time to time. Continued use of our services after changes are posted constitutes acceptance of the revised terms.',
+      'We reserve the right to update or change these terms at any time without prior notice. Continued use of the site constitutes acceptance of those changes.',
+    ],
+  },
+  {
+    heading: 'Contact Us',
+    body: [
+      'If you have any questions about these Terms and Conditions, feel free to contact our support team at premiumproductszone353@gmail.com or call +91 82388 00920.',
     ],
   },
 ];

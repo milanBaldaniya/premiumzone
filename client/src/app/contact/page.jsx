@@ -8,10 +8,10 @@ import Button from '@/components/ui/Button';
 import { Field } from '@/components/auth/Field';
 
 const INFO = [
-  { icon: FaMapMarkerAlt, label: 'Visit Us', value: '5th Avenue, New York, NY 10001' },
-  { icon: FaPhone, label: 'Call Us', value: '+1 (800) 555-SHOP' },
-  { icon: FaEnvelope, label: 'Email Us', value: 'concierge@premiumzone.com' },
-  { icon: FaClock, label: 'Hours', value: 'Mon–Sat · 9AM–8PM EST' },
+  { icon: FaMapMarkerAlt, label: 'Visit Us', value: 'Surat, Gujarat, India' },
+  { icon: FaPhone, label: 'Call Us', value: '+91 82388 00920' },
+  { icon: FaEnvelope, label: 'Email Us', value: 'premiumproductszone353@gmail.com' },
+  { icon: FaClock, label: 'Hours', value: 'Mon–Sat · 9AM–8PM IST' },
 ];
 
 export default function ContactPage() {

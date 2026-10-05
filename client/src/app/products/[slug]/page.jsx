@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
   const image = product.thumbnail?.url || product.gallery?.[0]?.url;
   const title = `${product.name} — ₹${Number(price).toLocaleString('en-IN')}`;
   const description =
-    product.shortDescription || product.description?.slice(0, 160) || `${product.name} — available now at Premium Zone.`;
+    product.shortDescription || product.description?.slice(0, 160) || `${product.name} — available now at Premium Product Zone.`;
 
   return {
     title,
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }) {
       title,
       description,
       url: `${SITE_URL}/products/${slug}`,
-      siteName: 'Premium Zone',
+      siteName: 'Premium Product Zone',
       type: 'website',
       images: image ? [{ url: image, width: 800, height: 800, alt: product.name }] : undefined,
     },

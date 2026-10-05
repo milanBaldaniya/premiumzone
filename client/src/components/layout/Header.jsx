@@ -43,11 +43,11 @@ export default function Header() {
       <div className="container-luxe flex h-16 items-center justify-between gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary font-display text-lg font-bold text-accent">
-            P
+          <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg bg-black p-1">
+            <img src="/logo-icon.png" alt="Premium Product Zone" className="h-full w-full object-contain" />
           </span>
           <span className="hidden font-display text-xl font-bold tracking-tight text-primary sm:block">
-            Premium Zone
+            Premium Product Zone
           </span>
         </Link>
 
@@ -137,7 +137,7 @@ export default function Header() {
               </Link>
             ))}
             {!isAuth && (
-              <Link href="/login" className="btn-gold mt-3 w-full">
+              <Link href="/login" onClick={() => setMenuOpen(false)} className="btn-gold mt-3 w-full">
                 Sign In
               </Link>
             )}

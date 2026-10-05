@@ -84,7 +84,7 @@ export default function FaqPage() {
       <PageHero
         eyebrow="Support"
         title="Frequently Asked Questions"
-        subtitle="Everything you need to know about shopping with Premium Zone."
+        subtitle="Everything you need to know about shopping with Premium Product Zone."
       />
 
       <section className="container-luxe max-w-3xl py-16">
