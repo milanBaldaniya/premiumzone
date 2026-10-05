@@ -7,60 +7,36 @@ import PageHero from '@/components/layout/PageHero';
 
 const FAQS = [
   {
-    q: 'Are all your products authentic?',
-    a: 'Absolutely. Every item is 100% genuine and sourced directly from authorized partners and brands. Each purchase includes official documentation and warranty where applicable.',
-  },
-  {
-    q: 'What payment methods do you accept?',
-    a: 'You can order directly via WhatsApp — we\'ll confirm your order and payment details in chat — or choose Cash on Delivery at checkout.',
-  },
-  {
-    q: 'How do I apply a discount coupon?',
-    a: 'Enter your coupon code in the "Coupon code" field in your cart and click Apply — the discount is calculated automatically and carries through to checkout.',
-  },
-  {
     q: 'Where is my order?',
-    a: 'You can track your order using the tracking link we send once it ships. You can also check your order status anytime from My Account → Orders.',
+    a: 'You can track your order using the tracking link provided after your order has been shipped. You can also check your order status from the My Orders section.',
   },
   {
     q: 'How can I track my order?',
-    a: 'Once your order is shipped, you\'ll receive a tracking link through email or WhatsApp. Use that link to view the latest shipment status.',
+    a: 'Once your order is shipped, you will receive a tracking link through the available communication channels. Use the tracking link to view the latest shipment status.',
   },
   {
     q: 'How long will it take to receive my order?',
-    a: 'Delivery time depends on your location and the courier service — orders are typically processed within 1–2 business days, with delivery in 3–7 business days. An estimated delivery date is shown at checkout and in your shipping confirmation. Free shipping applies to orders over ₹500.',
+    a: 'Delivery time depends on your location, the seller\'s processing time, and the courier service. The estimated delivery date is usually shown during checkout or after your order is shipped.',
   },
   {
     q: 'Do you offer Cash on Delivery (COD)?',
-    a: 'Yes — Cash on Delivery is available for most products and locations. COD availability is confirmed automatically at checkout based on your delivery address.',
-  },
-  {
-    q: 'Do you offer international shipping?',
-    a: 'Yes — we ship to over 40 countries with secure, insured delivery. Customs duties and taxes may apply based on your destination.',
+    a: 'Yes, Cash on Delivery may be available for selected products and locations. COD availability can be checked during checkout.',
   },
   {
     q: 'Can I cancel my order?',
-    a: 'You can request a cancellation any time before your order is shipped, either from My Account → Orders or by contacting our concierge team. Once an order has shipped, cancellation may no longer be possible.',
+    a: 'You can request cancellation before the order is shipped. Once the order has been shipped, cancellation may not be possible. Please contact the store as soon as possible if you want to cancel your order.',
   },
   {
     q: 'Can I change my delivery address after placing an order?',
-    a: 'If your order hasn\'t shipped yet, contact our concierge team as soon as possible and we\'ll update the address for you. Address changes aren\'t possible once an order has shipped.',
-  },
-  {
-    q: 'Why hasn\'t my tracking information been updated?',
-    a: 'Tracking updates can sometimes take a little time to appear after a shipment is picked up or moved between courier facilities. Please allow some time for the next update before reaching out.',
-  },
-  {
-    q: 'What is your return policy?',
-    a: 'We offer a 30-day return policy on eligible items in their original, unworn condition with all packaging and documentation. Contact our concierge to initiate a return.',
+    a: 'If your order has not been shipped, you may be able to request an address change. Please contact the store as soon as possible. Address changes may not be possible after shipment.',
   },
   {
     q: 'How can I contact you about my order?',
-    a: 'Reach our concierge team at premiumproductszone353@gmail.com or +91 82388 00920, or use the form on our Contact page, and we\'ll get back to you as soon as possible.',
+    a: 'For questions about your order, please contact the store using the support/contact details provided on this website.',
   },
   {
-    q: 'Is my personal information secure?',
-    a: 'Yes. We use industry-standard encryption, secure cookies and never store sensitive payment details. Read our Privacy Policy for full details.',
+    q: 'Why hasn\'t my tracking information been updated?',
+    a: 'Tracking updates can sometimes take time to appear after a shipment is picked up or moved between courier facilities. Please allow some time for the next tracking update.',
   },
 ];
 
