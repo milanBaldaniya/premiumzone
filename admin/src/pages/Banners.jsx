@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  Table, Button, Modal, Form, Input, Select, InputNumber, Switch, Space, Popconfirm, Typography, Image, Tag, App,
+  Button, Modal, Form, Input, Select, InputNumber, Switch, Space, Popconfirm, Typography, Image, Tag, App,
 } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import {
@@ -10,6 +10,7 @@ import {
   useDeleteBannerMutation,
 } from '../store/api/adminApi';
 import ImageUploader from '../components/ImageUploader';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const { Title } = Typography;
 
@@ -85,7 +86,7 @@ export default function Banners() {
         <Button type="primary" icon={<PlusOutlined />} onClick={() => openModal(null)}>Add Banner</Button>
       </div>
 
-      <Table rowKey="_id" columns={columns} dataSource={data?.data || []} loading={isFetching} scroll={{ x: 700 }} />
+      <ResponsiveTable rowKey="_id" columns={columns} dataSource={data?.data || []} loading={isFetching} scroll={{ x: 700 }} />
 
       <Modal
         title={editing ? 'Edit Banner' : 'New Banner'}

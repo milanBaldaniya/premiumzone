@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  Table, Button, Modal, Form, Input, InputNumber, Select, DatePicker, Space, Popconfirm, Typography, Tag, App,
+  Button, Modal, Form, Input, InputNumber, Select, DatePicker, Space, Popconfirm, Typography, Tag, App,
 } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
@@ -10,6 +10,7 @@ import {
   useUpdateCouponMutation,
   useDeleteCouponMutation,
 } from '../store/api/adminApi';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const { Title } = Typography;
 
@@ -78,7 +79,7 @@ export default function Coupons() {
         <Button type="primary" icon={<PlusOutlined />} onClick={() => openModal(null)}>Add Coupon</Button>
       </div>
 
-      <Table rowKey="_id" columns={columns} dataSource={data?.data || []} loading={isFetching} scroll={{ x: 800 }} />
+      <ResponsiveTable rowKey="_id" columns={columns} dataSource={data?.data || []} loading={isFetching} scroll={{ x: 800 }} />
 
       <Modal
         title={editing ? 'Edit Coupon' : 'New Coupon'}

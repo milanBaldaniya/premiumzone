@@ -1,7 +1,8 @@
-import { Table, Typography, Tag, Rate, Button, Space, App } from 'antd';
+import { Typography, Tag, Rate, Button, Space, App } from 'antd';
 import { CheckOutlined, StopOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useGetReviewsQuery, useModerateReviewMutation } from '../store/api/adminApi';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const { Title, Paragraph } = Typography;
 
@@ -52,7 +53,7 @@ export default function Reviews() {
   return (
     <div>
       <Title level={3} className="font-display" style={{ marginBottom: 20 }}>Reviews</Title>
-      <Table rowKey="_id" columns={columns} dataSource={data?.data || []} loading={isFetching} scroll={{ x: 900 }} />
+      <ResponsiveTable rowKey="_id" columns={columns} dataSource={data?.data || []} loading={isFetching} scroll={{ x: 900 }} />
     </div>
   );
 }

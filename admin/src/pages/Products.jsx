@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Button, Input, Space, Tag, Image, Popconfirm, Typography, App } from 'antd';
+import { Button, Input, Space, Tag, Image, Popconfirm, Typography, App } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import { useGetProductsQuery, useDeleteProductMutation } from '../store/api/adminApi';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const { Title } = Typography;
 
@@ -116,7 +117,7 @@ export default function Products() {
         onChange={(e) => setParams((p) => ({ ...p, search: e.target.value, page: 1 }))}
       />
 
-      <Table
+      <ResponsiveTable
         rowKey="_id"
         columns={columns}
         dataSource={products}

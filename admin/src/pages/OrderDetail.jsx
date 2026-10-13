@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  Card, Row, Col, Typography, Tag, Table, Descriptions, Select, Input, Button, Space, Timeline, Spin, App,
+  Card, Row, Col, Typography, Tag, Descriptions, Select, Input, Button, Space, Timeline, Spin, App,
 } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useGetOrderQuery, useUpdateOrderStatusMutation } from '../store/api/adminApi';
 import { STATUS_COLORS } from './Orders';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const { Title, Text } = Typography;
 const STATUS_FLOW = ['pending', 'confirmed', 'packed', 'shipped', 'delivered', 'cancelled', 'returned', 'refunded'];
@@ -63,7 +64,7 @@ export default function OrderDetail() {
       <Row gutter={16}>
         <Col xs={24} lg={16}>
           <Card title="Items" style={{ marginBottom: 16 }}>
-            <Table rowKey={(r) => r.sku + r.name} columns={itemColumns} dataSource={order.items} pagination={false} scroll={{ x: 600 }} />
+            <ResponsiveTable rowKey={(r) => r.sku + r.name} columns={itemColumns} dataSource={order.items} pagination={false} scroll={{ x: 600 }} />
             <div style={{ marginTop: 16, maxWidth: 280, marginLeft: 'auto' }}>
               <Summary label="Subtotal" value={order.itemsTotal} />
               {order.discountAmount > 0 && <Summary label="Discount" value={-order.discountAmount} />}

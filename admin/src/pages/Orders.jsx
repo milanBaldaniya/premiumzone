@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Tag, Typography, Select, Input, Space } from 'antd';
+import { Tag, Typography, Select, Input, Space } from 'antd';
 import { EyeOutlined, SearchOutlined } from '@ant-design/icons';
 import { useGetOrdersQuery } from '../store/api/adminApi';
+import ResponsiveTable from '../components/ResponsiveTable';
 import dayjs from 'dayjs';
 
 const { Title } = Typography;
@@ -74,7 +75,7 @@ export default function Orders() {
         />
       </Space>
 
-      <Table
+      <ResponsiveTable
         rowKey="_id"
         columns={columns}
         dataSource={orders}

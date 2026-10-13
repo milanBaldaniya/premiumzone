@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Table, Input, Typography, Tag, Switch, Avatar, App } from 'antd';
+import { Input, Typography, Tag, Switch, Avatar, App } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useGetCustomersQuery, useUpdateCustomerStatusMutation } from '../store/api/adminApi';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const { Title } = Typography;
 
@@ -63,7 +64,7 @@ export default function Customers() {
         style={{ maxWidth: 320, marginBottom: 16 }}
         onChange={(e) => setParams((p) => ({ ...p, search: e.target.value, page: 1 }))}
       />
-      <Table
+      <ResponsiveTable
         rowKey="_id"
         columns={columns}
         dataSource={data?.data || []}

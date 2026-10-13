@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Table, Button, Modal, Form, Input, Switch, Space, Popconfirm, Typography, Tag, App } from 'antd';
+import { Button, Modal, Form, Input, Switch, Space, Popconfirm, Typography, Tag, App } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import {
   useGetBrandsQuery,
@@ -7,6 +7,7 @@ import {
   useUpdateBrandMutation,
   useDeleteBrandMutation,
 } from '../store/api/adminApi';
+import ResponsiveTable from '../components/ResponsiveTable';
 
 const { Title } = Typography;
 
@@ -65,7 +66,7 @@ export default function Brands() {
         <Button type="primary" icon={<PlusOutlined />} onClick={() => openModal(null)}>Add Brand</Button>
       </div>
 
-      <Table rowKey="_id" columns={columns} dataSource={data?.data || []} loading={isFetching} scroll={{ x: 600 }} />
+      <ResponsiveTable rowKey="_id" columns={columns} dataSource={data?.data || []} loading={isFetching} scroll={{ x: 600 }} />
 
       <Modal
         title={editing ? 'Edit Brand' : 'New Brand'}
