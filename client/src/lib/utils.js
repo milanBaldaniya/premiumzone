@@ -32,3 +32,13 @@ export const debounce = (fn, delay = 350) => {
 
 export const truncate = (str = '', len = 80) =>
   str.length > len ? `${str.slice(0, len)}…` : str;
+
+/**
+ * Derives a Cloudinary auto-generated poster frame URL from a product video URL, so the
+ * gallery can show a thumbnail without downloading/playing the video itself. Falls back to
+ * `null` for non-Cloudinary URLs — callers should then fall back to a static placeholder.
+ */
+export const getVideoPosterUrl = (videoUrl) => {
+  if (!videoUrl || !videoUrl.includes('/video/upload/')) return null;
+  return videoUrl.replace('/video/upload/', '/video/upload/so_0/').replace(/\.\w+$/, '.jpg');
+};

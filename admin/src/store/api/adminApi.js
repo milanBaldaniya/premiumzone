@@ -149,6 +149,20 @@ export const adminApi = baseApi.injectEndpoints({
         body: { publicId },
       }),
     }),
+    uploadVideo: build.mutation({
+      query: ({ formData, folder = 'media/videos' }) => ({
+        url: `/upload/video?folder=${folder}`,
+        method: 'POST',
+        body: formData,
+      }),
+    }),
+    removeAsset: build.mutation({
+      query: ({ publicId, resourceType = 'image' }) => ({
+        url: '/upload/asset',
+        method: 'DELETE',
+        body: { publicId, resourceType },
+      }),
+    }),
   }),
 });
 
@@ -195,4 +209,6 @@ export const {
   useUpdateSettingsMutation,
   useUploadImageMutation,
   useRemoveImageMutation,
+  useUploadVideoMutation,
+  useRemoveAssetMutation,
 } = adminApi;

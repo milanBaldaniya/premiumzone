@@ -18,9 +18,27 @@ export const uploadImages = asyncHandler(async (req, res) => {
   sendResponse(res, { statusCode: 201, data: results, message: 'Images uploaded' });
 });
 
+// Kept exactly as before (defaults to resource_type 'image') — existing callers never send
+// a resourceType, so this stays backward compatible.
 export const removeImage = asyncHandler(async (req, res) => {
   const { publicId } = req.body;
   if (!publicId) throw ApiError.badRequest('publicId is required');
   await deleteAsset(publicId);
   sendResponse(res, { message: 'Image deleted' });
+});
+
+/** Generic single-video upload for the admin media library (product demo clips, etc). */
+export const uploadVideo = asyncHandler(async (req, res) => {
+  if (!req.file) throw ApiError.badRequest('No video provided');
+  const folder = req.query.folder || 'media/videos';
+  const result = await uploadBuffer(req.file.buffer, { folder, resourceType: 'video' });
+  sendResponse(res, { statusCode: 201, data: result, message: 'Video uploaded' });
+});
+
+/** Deletes any asset by publicId + resourceType — video assets need resourceType: 'video'. */
+export const removeAsset = asyncHandler(async (req, res) => {
+  const { publicId, resourceType = 'image' } = req.body;
+  if (!publicId) throw ApiError.badRequest('publicId is required');
+  await deleteAsset(publicId, resourceType);
+  sendResponse(res, { message: 'Asset deleted' });
 });

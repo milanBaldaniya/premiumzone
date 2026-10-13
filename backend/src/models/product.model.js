@@ -9,6 +9,11 @@ const imageSchema = new Schema(
   { _id: false }
 );
 
+const videoSchema = new Schema(
+  { url: { type: String, required: true }, publicId: String, duration: Number },
+  { _id: false }
+);
+
 const specSchema = new Schema(
   { key: { type: String, required: true }, value: { type: String, required: true } },
   { _id: false }
@@ -53,6 +58,7 @@ const productSchema = new Schema(
 
     thumbnail: imageSchema,
     gallery: [imageSchema],
+    video: videoSchema,
 
     specifications: [specSchema],
     variants: [variantSchema],

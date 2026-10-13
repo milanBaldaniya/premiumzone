@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import multer from 'multer';
 import { ApiError } from '../utils/ApiError.js';
 import { logger } from '../config/logger.js';
 import { isProd } from '../config/env.js';
@@ -6,6 +7,14 @@ import { isProd } from '../config/env.js';
 /** Normalizes any thrown value into an ApiError. */
 const normalize = (err) => {
   if (err instanceof ApiError) return err;
+
+  // Multer upload errors (file too large, too many files, …) — surfaced as 500s otherwise,
+  // which is misleading for what's really a bad request from the client.
+  if (err instanceof multer.MulterError) {
+    const message =
+      err.code === 'LIMIT_FILE_SIZE' ? 'File is too large' : err.message || 'Upload failed';
+    return ApiError.badRequest(message);
+  }
 
   // Mongoose bad ObjectId
   if (err instanceof mongoose.Error.CastError) {

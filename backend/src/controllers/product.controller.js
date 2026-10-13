@@ -94,9 +94,10 @@ const imagePublicIds = (doc) =>
   [doc.thumbnail?.publicId, ...(doc.gallery || []).map((g) => g.publicId)].filter(Boolean);
 
 export const updateProduct = asyncHandler(async (req, res) => {
-  const before = await Product.findById(req.params.id).select('thumbnail gallery');
+  const before = await Product.findById(req.params.id).select('thumbnail gallery video');
   if (!before) throw ApiError.notFound('Product not found');
   const beforeIds = imagePublicIds(before);
+  const beforeVideoId = before.video?.publicId;
 
   const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -109,6 +110,12 @@ export const updateProduct = asyncHandler(async (req, res) => {
   const orphaned = beforeIds.filter((id) => !afterIds.has(id));
   if (orphaned.length) deleteMany(orphaned).catch(() => {});
 
+  // Video lives in Cloudinary's separate 'video' resource namespace — clean it up the same way
+  // when it's replaced or removed, but only once it's actually gone from the document.
+  if (beforeVideoId && beforeVideoId !== product.video?.publicId) {
+    deleteAsset(beforeVideoId, 'video').catch(() => {});
+  }
+
   sendResponse(res, { data: product, message: 'Product updated' });
 });
 
@@ -117,6 +124,7 @@ export const deleteProduct = asyncHandler(async (req, res) => {
   if (!product) throw ApiError.notFound('Product not found');
   const publicIds = [product.thumbnail?.publicId, ...(product.gallery || []).map((g) => g.publicId)];
   await deleteMany(publicIds).catch(() => {});
+  if (product.video?.publicId) await deleteAsset(product.video.publicId, 'video').catch(() => {});
   sendResponse(res, { data: { id: product._id }, message: 'Product deleted' });
 });
 

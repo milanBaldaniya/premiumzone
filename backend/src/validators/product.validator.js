@@ -9,6 +9,12 @@ const imageSchema = z.object({
   alt: z.string().optional(),
 });
 
+const videoSchema = z.object({
+  url: z.string().url(),
+  publicId: z.string().optional(),
+  duration: z.number().optional(),
+});
+
 export const createProductSchema = z.object({
   name: z.string().min(2).max(160),
   sku: z.string().min(1),
@@ -22,6 +28,7 @@ export const createProductSchema = z.object({
   gender: z.enum(Object.values(GENDER)).optional(),
   thumbnail: imageSchema.optional(),
   gallery: z.array(imageSchema).optional(),
+  video: videoSchema.nullable().optional(),
   specifications: z.array(z.object({ key: z.string(), value: z.string() })).optional(),
   variants: z
     .array(

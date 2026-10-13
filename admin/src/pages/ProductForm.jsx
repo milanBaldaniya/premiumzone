@@ -12,6 +12,7 @@ import {
   useGetCategoriesQuery,
 } from '../store/api/adminApi';
 import ImageUploader from '../components/ImageUploader';
+import VideoUploader from '../components/VideoUploader';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -42,6 +43,7 @@ export default function ProductForm() {
   const [updateProduct, { isLoading: updating }] = useUpdateProductMutation();
 
   const [gallery, setGallery] = useState([]);
+  const [video, setVideo] = useState(null);
   // Once the admin manually edits the SKU (or we're editing an existing product),
   // stop silently overwriting it as they keep typing the name/brand.
   const [skuTouched, setSkuTouched] = useState(isEdit);
@@ -55,6 +57,7 @@ export default function ProductForm() {
         category: p.category?._id,
       });
       setGallery(p.gallery?.length ? p.gallery : [p.thumbnail].filter(Boolean));
+      setVideo(p.video || null);
     }
   }, [productData, form]);
 
@@ -78,6 +81,7 @@ export default function ProductForm() {
       ...rawValues,
       gallery,
       thumbnail: gallery[0] || undefined,
+      video: video || null,
     };
     try {
       if (isEdit) {
@@ -146,6 +150,13 @@ export default function ProductForm() {
                 The first image is used as the thumbnail. Images upload to Cloudinary instantly.
               </Typography.Paragraph>
               <ImageUploader value={gallery} onChange={setGallery} folder="products" max={8} />
+            </Card>
+
+            <Card title="Video" style={{ marginBottom: 16 }}>
+              <Typography.Paragraph type="secondary" style={{ marginTop: -8 }}>
+                Optional — shown alongside the images in the product gallery. One video per product.
+              </Typography.Paragraph>
+              <VideoUploader value={video} onChange={setVideo} folder="products" />
             </Card>
 
             <Card title="Pricing & Inventory">

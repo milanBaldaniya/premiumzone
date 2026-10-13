@@ -150,19 +150,47 @@ export default function CheckoutPage() {
         // Which methods appear (UPI, cards, netbanking, ...) is controlled by the Razorpay
         // Dashboard's Payment Methods settings for this account, not by a client-side flag.
         handler: async (response) => {
-          try {
-            const res = await verifyRazorpayPayment({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            }).unwrap();
+          const verifyPayload = {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+          };
+
+          // The access token can expire while the user is off completing payment (UPI/netbanking
+          // can take minutes); a lone failed verify call used to just toast and leave the user
+          // stranded on checkout — looking exactly like a "redirect back to checkout" after paying.
+          // Retry once after a short delay before giving up, since most failures here are transient
+          // (a race with token refresh, a brief network blip).
+          let res;
+          let lastErr;
+          for (let attempt = 0; attempt < 2; attempt += 1) {
+            try {
+              res = await verifyRazorpayPayment(verifyPayload).unwrap();
+              lastErr = null;
+              break;
+            } catch (err) {
+              lastErr = err;
+              if (attempt === 0) await new Promise((r) => setTimeout(r, 1500));
+            }
+          }
+
+          setPayingOnline(false);
+
+          if (res) {
             toast.success('Payment successful — order placed!');
             router.push(`/account/orders/${res.data.orderNumber}`);
-          } catch (err) {
-            toast.error(err?.data?.message || 'Payment succeeded but order verification failed — contact support');
-          } finally {
-            setPayingOnline(false);
+            return;
           }
+
+          // Payment was captured by Razorpay even though verification kept failing on our end —
+          // Razorpay's webhook will finalize the order independently, so send the user to their
+          // orders list (not back to checkout) rather than risk a duplicate payment on retry.
+          toast.error(
+            lastErr?.data?.message ||
+              'Payment succeeded but we could not confirm it automatically — check your orders or contact support.',
+            { duration: 8000 }
+          );
+          router.push('/account/orders');
         },
         modal: {
           ondismiss: () => setPayingOnline(false),

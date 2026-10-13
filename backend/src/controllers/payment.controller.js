@@ -1,5 +1,6 @@
 import Order from '../models/order.model.js';
 import Cart from '../models/cart.model.js';
+import Coupon from '../models/coupon.model.js';
 import Address from '../models/address.model.js';
 import User from '../models/user.model.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
@@ -25,15 +26,23 @@ export const createOrder = asyncHandler(async (req, res) => {
 
   const { itemsTotal } = await buildLineItems(cart.items);
   let discount = 0;
-  if (couponCode) {
-    discount = (await applyCoupon(couponCode, itemsTotal, req.user._id)).discount;
+  // Fall back to the coupon already applied on the cart (via /cart/coupon) — the client
+  // doesn't resend it here, so without this the Razorpay amount would ignore any active
+  // discount while the order placed after payment would apply it, charging the full price.
+  let resolvedCouponCode;
+  const code = couponCode || cart.coupon;
+  if (code) {
+    resolvedCouponCode = typeof code === 'string' ? code : (await Coupon.findById(code))?.code;
+    if (resolvedCouponCode) {
+      discount = (await applyCoupon(resolvedCouponCode, itemsTotal, req.user._id)).discount;
+    }
   }
   const { grandTotal } = await computeTotals({ itemsTotal, discount });
 
   const rpOrder = await createRazorpayOrder({
     amount: grandTotal,
     receipt: `rcpt_${Date.now()}`,
-    notes: { userId: req.user._id.toString(), addressId, couponCode: couponCode || '' },
+    notes: { userId: req.user._id.toString(), addressId, couponCode: resolvedCouponCode || '' },
   });
 
   sendResponse(res, {

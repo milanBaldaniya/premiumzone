@@ -79,7 +79,7 @@ export default function ProductDetailClient({ slug }) {
     <div className="container-luxe py-10">
       <div className="grid gap-10 lg:grid-cols-2">
         {/* Gallery */}
-        <ProductGallery gallery={gallery} alt={product.name} discountPercent={off} />
+        <ProductGallery gallery={gallery} video={product.video} alt={product.name} discountPercent={off} />
 
         {/* Info */}
         <div>

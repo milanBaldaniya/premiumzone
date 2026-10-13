@@ -5,9 +5,9 @@ import { ApiError } from '../utils/ApiError.js';
 /**
  * Uploads a Multer memory-buffer to Cloudinary and returns { url, publicId }.
  * @param {Buffer} buffer
- * @param {{ folder?: string, filename?: string }} opts
+ * @param {{ folder?: string, filename?: string, resourceType?: 'image'|'video' }} opts
  */
-export const uploadBuffer = (buffer, { folder = 'misc', filename } = {}) =>
+export const uploadBuffer = (buffer, { folder = 'misc', filename, resourceType = 'image' } = {}) =>
   new Promise((resolve, reject) => {
     if (!isCloudinaryConfigured()) {
       return reject(ApiError.internal('Cloudinary is not configured'));
@@ -16,12 +16,17 @@ export const uploadBuffer = (buffer, { folder = 'misc', filename } = {}) =>
       {
         folder: `${env.CLOUDINARY_FOLDER}/${folder}`,
         public_id: filename,
-        resource_type: 'image',
-        transformation: [{ quality: 'auto', fetch_format: 'auto' }],
+        resource_type: resourceType,
+        // Video doesn't support the image-only fetch_format='auto' transform.
+        transformation: resourceType === 'video' ? [{ quality: 'auto' }] : [{ quality: 'auto', fetch_format: 'auto' }],
       },
       (error, result) => {
         if (error) return reject(ApiError.internal(`Upload failed: ${error.message}`));
-        resolve({ url: result.secure_url, publicId: result.public_id });
+        resolve({
+          url: result.secure_url,
+          publicId: result.public_id,
+          ...(resourceType === 'video' ? { duration: result.duration } : {}),
+        });
       }
     );
     stream.end(buffer);
@@ -31,14 +36,18 @@ export const uploadBuffer = (buffer, { folder = 'misc', filename } = {}) =>
 export const uploadMany = (files = [], folder = 'misc') =>
   Promise.all(files.map((f) => uploadBuffer(f.buffer, { folder })));
 
-/** Deletes an asset by its Cloudinary publicId (no-op if missing). */
-export const deleteAsset = async (publicId) => {
+/**
+ * Deletes an asset by its Cloudinary publicId (no-op if missing). Video assets live in a
+ * separate Cloudinary resource namespace, so `resourceType` must match what it was uploaded as
+ * or the delete silently targets the wrong (empty) namespace and the asset is never removed.
+ */
+export const deleteAsset = async (publicId, resourceType = 'image') => {
   if (!publicId || !isCloudinaryConfigured()) return null;
-  return cloudinary.uploader.destroy(publicId);
+  return cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
 };
 
-export const deleteMany = (publicIds = []) =>
-  Promise.all(publicIds.filter(Boolean).map(deleteAsset));
+export const deleteMany = (publicIds = [], resourceType = 'image') =>
+  Promise.all(publicIds.filter(Boolean).map((id) => deleteAsset(id, resourceType)));
 
 /** Replace: upload the new asset, then delete the old one. */
 export const replaceAsset = async (buffer, oldPublicId, folder = 'misc') => {
