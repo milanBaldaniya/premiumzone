@@ -69,6 +69,7 @@ export default function ImageUploader({ value = [], onChange, folder = 'products
       fileList={fileList}
       customRequest={customRequest}
       accept="image/*"
+      multiple
       onRemove={handleRemove}
     >
       {fileList.length >= max ? null : (
