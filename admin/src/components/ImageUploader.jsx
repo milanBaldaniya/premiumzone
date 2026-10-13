@@ -39,7 +39,10 @@ export default function ImageUploader({ value = [], onChange, folder = 'products
       const res = await uploadImage({ formData, folder }).unwrap();
       onSuccess(res.data);
       setPending((p) => p.filter((f) => f.uid !== file.uid));
-      onChange?.([...(value || []), { url: res.data.url, publicId: res.data.publicId }]);
+      // Functional update — selecting multiple files fires one customRequest per file in
+      // parallel, so each resolves against whatever `value` was at render time. Appending to
+      // that stale snapshot meant the upload that finished last silently overwrote the others.
+      onChange?.((prev) => [...(prev || []), { url: res.data.url, publicId: res.data.publicId }]);
     } catch (err) {
       message.error('Upload failed');
       setPending((p) => p.filter((f) => f.uid !== file.uid));
@@ -52,7 +55,7 @@ export default function ImageUploader({ value = [], onChange, folder = 'products
       setPending((p) => p.filter((f) => f.uid !== file.uid));
       return;
     }
-    onChange?.((value || []).filter((img) => (img.publicId || null) !== file.publicId));
+    onChange?.((prev) => (prev || []).filter((img) => (img.publicId || null) !== file.publicId));
 
     // Image already lives in Cloudinary (either pre-existing or just uploaded) — clean it up now
     // rather than waiting on the form's save, which otherwise just overwrites the DB reference.
