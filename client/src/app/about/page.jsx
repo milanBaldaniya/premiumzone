@@ -63,7 +63,7 @@ export default function AboutPage() {
           <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-accent-dark">What We Stand For</p>
           <h2 className="font-display text-3xl font-bold text-primary">Our Values</h2>
         </div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {VALUES.map((v) => (
             <div key={v.title} className="card-luxe p-6 text-center">
               <span className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-accent/10 text-accent-dark">

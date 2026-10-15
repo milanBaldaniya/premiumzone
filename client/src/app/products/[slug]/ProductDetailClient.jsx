@@ -35,7 +35,7 @@ export default function ProductDetailClient({ slug }) {
 
   if (isLoading) {
     return (
-      <div className="container-luxe grid gap-10 py-12 lg:grid-cols-2">
+      <div className="container-luxe grid grid-cols-1 gap-10 py-12 lg:grid-cols-2">
         <div className="skeleton aspect-square rounded-2xl" />
         <div className="space-y-4">
           <div className="skeleton h-8 w-2/3 rounded" />
@@ -77,7 +77,7 @@ export default function ProductDetailClient({ slug }) {
 
   return (
     <div className="container-luxe py-10">
-      <div className="grid gap-10 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
         {/* Gallery */}
         <ProductGallery gallery={gallery} video={product.video} alt={product.name} discountPercent={off} />
 
@@ -168,7 +168,7 @@ export default function ProductDetailClient({ slug }) {
       </div>
 
       {/* Description + specs */}
-      <div className="mt-14 grid gap-10 lg:grid-cols-3">
+      <div className="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <h2 className="font-display text-2xl font-bold text-primary">Description</h2>
           <p className="mt-4 whitespace-pre-line leading-relaxed text-slate-600">{product.description}</p>

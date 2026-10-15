@@ -41,7 +41,7 @@ export default function Testimonials() {
         </div>
 
         {isLoading ? (
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 3 }).map((_, i) => (
               <div key={i} className="skeleton h-56 rounded-2xl" />
             ))}
@@ -52,7 +52,7 @@ export default function Testimonials() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
-            className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
           >
             {reviews.map((r) => (
               <motion.div

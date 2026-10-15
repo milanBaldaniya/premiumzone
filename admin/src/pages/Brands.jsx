@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Modal, Form, Input, Switch, Space, Popconfirm, Typography, Tag, App } from 'antd';
+import { Button, Modal, Form, Input, Switch, Space, Popconfirm, Typography, Tag, Image, App } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import {
   useGetBrandsQuery,
@@ -8,6 +8,7 @@ import {
   useDeleteBrandMutation,
 } from '../store/api/adminApi';
 import ResponsiveTable from '../components/ResponsiveTable';
+import ImageUploader from '../components/ImageUploader';
 
 const { Title } = Typography;
 
@@ -20,29 +21,62 @@ export default function Brands() {
 
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [logo, setLogo] = useState([]);
+  const [logoUploading, setLogoUploading] = useState(false);
   const [form] = Form.useForm();
 
   const openModal = (record) => {
     setEditing(record);
+    setLogo(record?.logo ? [record.logo] : []);
+    setLogoUploading(false);
     form.setFieldsValue(record || { isActive: true, isFeatured: false });
     setOpen(true);
   };
 
   const onFinish = async (values) => {
+    const payload = { ...values, logo: logo[0] || null };
     try {
-      if (editing) await updateBrand({ id: editing._id, ...values }).unwrap();
-      else await createBrand(values).unwrap();
+      if (editing) await updateBrand({ id: editing._id, ...payload }).unwrap();
+      else await createBrand(payload).unwrap();
       message.success(editing ? 'Brand updated' : 'Brand created');
       setOpen(false);
       form.resetFields();
       setEditing(null);
+      setLogo([]);
     } catch (err) {
       message.error(err?.data?.message || 'Save failed');
     }
   };
 
   const columns = [
-    { title: 'Name', dataIndex: 'name', render: (v) => <strong>{v}</strong> },
+    {
+      title: 'Brand',
+      dataIndex: 'name',
+      render: (name, row) => (
+        <Space>
+          {row.logo?.url ? (
+            <Image src={row.logo.url} width={40} height={40} style={{ objectFit: 'contain', borderRadius: 6 }} />
+          ) : (
+            <div
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 6,
+                background: '#0F172A',
+                color: '#D4AF37',
+                display: 'grid',
+                placeItems: 'center',
+                fontWeight: 700,
+                flexShrink: 0,
+              }}
+            >
+              {name?.[0]?.toUpperCase()}
+            </div>
+          )}
+          <strong>{name}</strong>
+        </Space>
+      ),
+    },
     { title: 'Country', dataIndex: 'country', render: (v) => v || '—' },
     { title: 'Featured', dataIndex: 'isFeatured', render: (v) => (v ? <Tag color="gold">Featured</Tag> : '—') },
     { title: 'Active', dataIndex: 'isActive', render: (v) => <Tag color={v ? 'green' : 'red'}>{v ? 'Active' : 'Inactive'}</Tag> },
@@ -71,11 +105,16 @@ export default function Brands() {
       <Modal
         title={editing ? 'Edit Brand' : 'New Brand'}
         open={open}
-        onCancel={() => { setOpen(false); setEditing(null); form.resetFields(); }}
+        onCancel={() => { setOpen(false); setEditing(null); setLogo([]); setLogoUploading(false); form.resetFields(); }}
         onOk={() => form.submit()}
+        okButtonProps={{ disabled: logoUploading }}
+        okText={logoUploading ? 'Waiting for upload…' : 'OK'}
         destroyOnClose
       >
         <Form form={form} layout="vertical" onFinish={onFinish}>
+          <Form.Item label="Logo">
+            <ImageUploader value={logo} onChange={setLogo} folder="brands" max={1} onUploadingChange={setLogoUploading} />
+          </Form.Item>
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input placeholder="Rolex" />
           </Form.Item>

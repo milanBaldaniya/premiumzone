@@ -21,7 +21,7 @@ export default function BlogPage() {
       </div>
 
       {isLoading ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="skeleton h-80 rounded-2xl" />
           ))}
@@ -29,7 +29,7 @@ export default function BlogPage() {
       ) : blogs.length === 0 ? (
         <p className="py-20 text-center text-slate-400">No articles published yet.</p>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {blogs.map((blog) => (
             <Link key={blog._id} href={`/blog/${blog.slug}`} className="card-luxe group overflow-hidden hover:shadow-luxe">
               <div className="relative aspect-[16/10] overflow-hidden bg-slate-50">
