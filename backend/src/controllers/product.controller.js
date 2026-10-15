@@ -73,8 +73,8 @@ export const getRelatedProducts = asyncHandler(async (req, res) => {
 export const getStorefrontSections = asyncHandler(async (_req, res) => {
   const base = { status: PRODUCT_STATUS.ACTIVE };
   const [featured, trending, newArrivals, bestSellers] = await Promise.all([
-    Product.find({ ...base, isFeatured: true }).limit(8).populate(POPULATE),
-    Product.find({ ...base, isTrending: true }).limit(8).populate(POPULATE),
+    Product.find({ ...base, isFeatured: true }).sort('-createdAt').limit(8).populate(POPULATE),
+    Product.find({ ...base, isTrending: true }).sort('-createdAt').limit(8).populate(POPULATE),
     Product.find({ ...base, isNewArrival: true }).sort('-createdAt').limit(8).populate(POPULATE),
     Product.find({ ...base, isBestSeller: true }).sort('-soldCount').limit(8).populate(POPULATE),
   ]);

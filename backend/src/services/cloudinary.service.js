@@ -17,8 +17,15 @@ export const uploadBuffer = (buffer, { folder = 'misc', filename, resourceType =
         folder: `${env.CLOUDINARY_FOLDER}/${folder}`,
         public_id: filename,
         resource_type: resourceType,
-        // Video doesn't support the image-only fetch_format='auto' transform.
-        transformation: resourceType === 'video' ? [{ quality: 'auto' }] : [{ quality: 'auto', fetch_format: 'auto' }],
+        // Video doesn't support the image-only fetch_format='auto' transform. Images are also
+        // capped to 2000px on the long edge (crop: 'limit' never upscales smaller images) —
+        // without this, an uncompressed phone-camera photo (often 6000px+, several MB) gets
+        // stored and served at full size, which is what was breaking the product gallery layout
+        // on slow mobile connections.
+        transformation:
+          resourceType === 'video'
+            ? [{ quality: 'auto' }]
+            : [{ width: 2000, height: 2000, crop: 'limit' }, { quality: 'auto', fetch_format: 'auto' }],
       },
       (error, result) => {
         if (error) return reject(ApiError.internal(`Upload failed: ${error.message}`));

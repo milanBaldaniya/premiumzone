@@ -11,16 +11,23 @@ const MAX_SIZE_MB = 50;
  * Mirrors ImageUploader's shape — emits { url, publicId, duration } (or null) via onChange.
  *
  * Props:
- *   value:    { url, publicId, duration } | null
- *   onChange: (video | null) => void
- *   folder:   Cloudinary sub-folder (default 'products')
+ *   value:             { url, publicId, duration } | null
+ *   onChange:          (video | null) => void
+ *   folder:            Cloudinary sub-folder (default 'products')
+ *   onUploadingChange: (isUploading: boolean) => void — lets the parent form disable Save
+ *                       while the video is still uploading.
  */
-export default function VideoUploader({ value, onChange, folder = 'products' }) {
+export default function VideoUploader({ value, onChange, folder = 'products', onUploadingChange }) {
   const { message } = App.useApp();
   const [uploadVideo] = useUploadVideoMutation();
   const [removeAsset] = useRemoveAssetMutation();
   const [uploading, setUploading] = useState(false);
   const [removing, setRemoving] = useState(false);
+
+  const setUploadingState = (val) => {
+    setUploading(val);
+    onUploadingChange?.(val);
+  };
 
   const beforeUpload = (file) => {
     if (!ALLOWED_TYPES.includes(file.type)) {
@@ -35,7 +42,7 @@ export default function VideoUploader({ value, onChange, folder = 'products' }) 
   };
 
   const customRequest = async ({ file, onSuccess, onError }) => {
-    setUploading(true);
+    setUploadingState(true);
     const formData = new FormData();
     formData.append('video', file);
     try {
@@ -47,7 +54,7 @@ export default function VideoUploader({ value, onChange, folder = 'products' }) 
       message.error(err?.data?.message || 'Video upload failed');
       onError(err);
     } finally {
-      setUploading(false);
+      setUploadingState(false);
     }
   };
 

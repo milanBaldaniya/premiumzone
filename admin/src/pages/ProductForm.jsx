@@ -44,6 +44,11 @@ export default function ProductForm() {
 
   const [gallery, setGallery] = useState([]);
   const [video, setVideo] = useState(null);
+  // Blocks Save while an image/video upload is still in flight — without this, saving mid-upload
+  // (easy on a slow connection) silently excludes whatever hadn't finished uploading yet.
+  const [imagesUploading, setImagesUploading] = useState(false);
+  const [videoUploading, setVideoUploading] = useState(false);
+  const uploadsInProgress = imagesUploading || videoUploading;
   // Once the admin manually edits the SKU (or we're editing an existing product),
   // stop silently overwriting it as they keep typing the name/brand.
   const [skuTouched, setSkuTouched] = useState(isEdit);
@@ -149,14 +154,20 @@ export default function ProductForm() {
               <Typography.Paragraph type="secondary" style={{ marginTop: -8 }}>
                 The first image is used as the thumbnail. Images upload to Cloudinary instantly.
               </Typography.Paragraph>
-              <ImageUploader value={gallery} onChange={setGallery} folder="products" max={8} />
+              <ImageUploader
+                value={gallery}
+                onChange={setGallery}
+                folder="products"
+                max={8}
+                onUploadingChange={setImagesUploading}
+              />
             </Card>
 
             <Card title="Video" style={{ marginBottom: 16 }}>
               <Typography.Paragraph type="secondary" style={{ marginTop: -8 }}>
                 Optional — shown alongside the images in the product gallery. One video per product.
               </Typography.Paragraph>
-              <VideoUploader value={video} onChange={setVideo} folder="products" />
+              <VideoUploader value={video} onChange={setVideo} folder="products" onUploadingChange={setVideoUploading} />
             </Card>
 
             <Card title="Pricing & Inventory">
@@ -248,11 +259,21 @@ export default function ProductForm() {
           </Col>
         </Row>
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 8 }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 12, marginTop: 8 }}>
+          {uploadsInProgress && (
+            <Typography.Text type="secondary">Waiting for upload to finish…</Typography.Text>
+          )}
           <Button onClick={() => navigate('/products')}>Cancel</Button>
-          <Button type="primary" htmlType="submit" loading={creating || updating}>
-            {isEdit ? 'Update Product' : 'Create Product'}
-          </Button>
+          <Tooltip title={uploadsInProgress ? 'Please wait for the image/video upload to finish' : ''}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={creating || updating}
+              disabled={uploadsInProgress}
+            >
+              {isEdit ? 'Update Product' : 'Create Product'}
+            </Button>
+          </Tooltip>
         </div>
       </Form>
     </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Upload, App } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useUploadImageMutation, useRemoveImageMutation } from '../store/api/adminApi';
@@ -8,12 +8,16 @@ import { useUploadImageMutation, useRemoveImageMutation } from '../store/api/adm
  * Emits an array of { url, publicId } via onChange — ready to store on a product.
  *
  * Props:
- *   value:    [{ url, publicId }]
- *   onChange: (images) => void
- *   folder:   Cloudinary sub-folder (default 'products')
- *   max:      maximum number of images
+ *   value:             [{ url, publicId }]
+ *   onChange:          (images) => void
+ *   folder:            Cloudinary sub-folder (default 'products')
+ *   max:               maximum number of images
+ *   onUploadingChange: (isUploading: boolean) => void — lets the parent form disable Save
+ *                       while files are still in flight. Without this, saving mid-upload
+ *                       (easy to do on a slow connection) silently excludes whatever hadn't
+ *                       finished uploading yet — not a lost-state bug, just a timing gap.
  */
-export default function ImageUploader({ value = [], onChange, folder = 'products', max = 8 }) {
+export default function ImageUploader({ value = [], onChange, folder = 'products', max = 8, onUploadingChange }) {
   const { message } = App.useApp();
   const [uploadImage] = useUploadImageMutation();
   const [removeImage] = useRemoveImageMutation();
@@ -21,6 +25,15 @@ export default function ImageUploader({ value = [], onChange, folder = 'products
   // files still in flight — keeping a separate copy of "done" files here too was
   // the bug: it raced against `value` and got wiped mid-upload on every re-sync.
   const [pending, setPending] = useState([]);
+
+  const prevUploadingRef = useRef(false);
+  useEffect(() => {
+    const isUploading = pending.length > 0;
+    if (isUploading !== prevUploadingRef.current) {
+      prevUploadingRef.current = isUploading;
+      onUploadingChange?.(isUploading);
+    }
+  }, [pending, onUploadingChange]);
 
   const doneFiles = (value || []).map((img, i) => ({
     uid: img.publicId || `existing-${i}`,

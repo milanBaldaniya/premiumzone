@@ -26,11 +26,13 @@ export default function Banners() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [images, setImages] = useState([]);
+  const [imageUploading, setImageUploading] = useState(false);
   const [form] = Form.useForm();
 
   const openModal = (record) => {
     setEditing(record);
     setImages(record?.image ? [record.image] : []);
+    setImageUploading(false);
     form.setFieldsValue(
       record || { placement: 'hero', isActive: true, ctaText: 'Shop Now', ctaLink: '/products', sortOrder: 0 }
     );
@@ -91,15 +93,23 @@ export default function Banners() {
       <Modal
         title={editing ? 'Edit Banner' : 'New Banner'}
         open={open}
-        onCancel={() => { setOpen(false); setEditing(null); setImages([]); form.resetFields(); }}
+        onCancel={() => { setOpen(false); setEditing(null); setImages([]); setImageUploading(false); form.resetFields(); }}
         onOk={() => form.submit()}
+        okButtonProps={{ disabled: imageUploading }}
+        okText={imageUploading ? 'Waiting for upload…' : 'OK'}
         destroyOnClose
       >
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item name="title" label="Title" rules={[{ required: true }]}><Input /></Form.Item>
           <Form.Item name="subtitle" label="Subtitle"><Input /></Form.Item>
           <Form.Item label="Banner Image" required>
-            <ImageUploader value={images} onChange={setImages} folder="banners" max={1} />
+            <ImageUploader
+              value={images}
+              onChange={setImages}
+              folder="banners"
+              max={1}
+              onUploadingChange={setImageUploading}
+            />
           </Form.Item>
           <Space style={{ display: 'flex' }} align="baseline">
             <Form.Item name="placement" label="Placement">
