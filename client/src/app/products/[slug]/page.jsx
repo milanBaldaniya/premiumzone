@@ -56,7 +56,6 @@ export async function generateMetadata({ params }) {
       'product:price:amount': String(price),
       'product:price:currency': product.currency || 'INR',
       'product:availability': inStock ? 'in stock' : 'out of stock',
-      'product:brand': product.brand?.name || 'Premium Products Zone',
     },
   };
 }
@@ -74,7 +73,8 @@ function ProductJsonLd({ product, slug }) {
     description: product.shortDescription || product.description?.slice(0, 300),
     image: [product.thumbnail?.url, ...(product.gallery?.map((g) => g.url) || [])].filter(Boolean),
     sku: product.sku,
-    brand: { '@type': 'Brand', name: product.brand?.name || 'Premium Products Zone' },
+    category: product.category?.name,
+    brand: { '@type': 'Brand', name: 'Premium Products Zone' },
     offers: {
       '@type': 'Offer',
       url,

@@ -75,9 +75,9 @@ export default function ProductCard({ product }) {
         </div>
 
         <div className="space-y-2 p-4">
-          {product.brand?.name && (
+          {product.category?.name && (
             <p className="text-xs font-medium uppercase tracking-wider text-accent-dark">
-              {product.brand.name}
+              {product.category.name}
             </p>
           )}
           <h3 className="line-clamp-1 font-sans text-sm font-semibold text-ink">{product.name}</h3>

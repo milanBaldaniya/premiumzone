@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Modal, Form, Input, Switch, Space, Popconfirm, Typography, Tag, App } from 'antd';
+import { Button, Modal, Form, Input, Switch, Space, Popconfirm, Typography, Tag, Image, App } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import {
   useGetCategoriesQuery,
@@ -8,6 +8,7 @@ import {
   useDeleteCategoryMutation,
 } from '../store/api/adminApi';
 import ResponsiveTable from '../components/ResponsiveTable';
+import ImageUploader from '../components/ImageUploader';
 
 const { Title } = Typography;
 
@@ -20,22 +21,28 @@ export default function Categories() {
 
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [image, setImage] = useState([]);
+  const [imageUploading, setImageUploading] = useState(false);
   const [form] = Form.useForm();
 
   const openModal = (record) => {
     setEditing(record);
+    setImage(record?.image?.url ? [record.image] : []);
+    setImageUploading(false);
     form.setFieldsValue(record || { isActive: true, isFeatured: false });
     setOpen(true);
   };
 
   const onFinish = async (values) => {
+    const payload = { ...values, image: image[0] || null };
     try {
-      if (editing) await updateCategory({ id: editing._id, ...values }).unwrap();
-      else await createCategory(values).unwrap();
+      if (editing) await updateCategory({ id: editing._id, ...payload }).unwrap();
+      else await createCategory(payload).unwrap();
       message.success(editing ? 'Category updated' : 'Category created');
       setOpen(false);
       form.resetFields();
       setEditing(null);
+      setImage([]);
     } catch (err) {
       message.error(err?.data?.message || 'Save failed');
     }
@@ -51,7 +58,34 @@ export default function Categories() {
   };
 
   const columns = [
-    { title: 'Name', dataIndex: 'name', render: (v) => <strong>{v}</strong> },
+    {
+      title: 'Category',
+      dataIndex: 'name',
+      render: (name, row) => (
+        <Space>
+          {row.image?.url ? (
+            <Image src={row.image.url} width={40} height={40} style={{ objectFit: 'cover', borderRadius: 6 }} />
+          ) : (
+            <div
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 6,
+                background: '#0F172A',
+                color: '#D4AF37',
+                display: 'grid',
+                placeItems: 'center',
+                fontWeight: 700,
+                flexShrink: 0,
+              }}
+            >
+              {name?.[0]?.toUpperCase()}
+            </div>
+          )}
+          <strong>{name}</strong>
+        </Space>
+      ),
+    },
     { title: 'Slug', dataIndex: 'slug' },
     { title: 'Featured', dataIndex: 'isFeatured', render: (v) => (v ? <Tag color="gold">Featured</Tag> : '—') },
     { title: 'Active', dataIndex: 'isActive', render: (v) => <Tag color={v ? 'green' : 'red'}>{v ? 'Active' : 'Inactive'}</Tag> },
@@ -80,13 +114,18 @@ export default function Categories() {
       <Modal
         title={editing ? 'Edit Category' : 'New Category'}
         open={open}
-        onCancel={() => { setOpen(false); setEditing(null); form.resetFields(); }}
+        onCancel={() => { setOpen(false); setEditing(null); setImage([]); setImageUploading(false); form.resetFields(); }}
         onOk={() => form.submit()}
+        okButtonProps={{ disabled: imageUploading }}
+        okText={imageUploading ? 'Waiting for upload…' : 'OK'}
         destroyOnClose
       >
         <Form form={form} layout="vertical" onFinish={onFinish}>
+          <Form.Item label="Image">
+            <ImageUploader value={image} onChange={setImage} folder="categories" max={1} onUploadingChange={setImageUploading} />
+          </Form.Item>
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-            <Input placeholder="Luxury Watches" />
+            <Input placeholder="Men's Watch" />
           </Form.Item>
           <Form.Item name="description" label="Description">
             <Input.TextArea rows={3} />

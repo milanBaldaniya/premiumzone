@@ -119,10 +119,10 @@ export default function Hero() {
                 {slide.ctaText || 'Shop Now'} <FaArrowRight size={14} />
               </Link>
               <Link
-                href="/brands"
+                href="/categories"
                 className="btn border border-white/20 text-white hover:border-accent hover:text-accent"
               >
-                View Brands
+                View Categories
               </Link>
             </div>
           </motion.div>

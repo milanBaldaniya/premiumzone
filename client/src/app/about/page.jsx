@@ -1,3 +1,13 @@
+import { notFound } from 'next/navigation';
+
+// Page temporarily disabled — see commented-out original below. To restore: delete this
+// stub and uncomment the block.
+export default function AboutPage() {
+  notFound();
+}
+
+/* ─── ORIGINAL PAGE (disabled) ───────────────────────────────────────────
+
 import Link from 'next/link';
 import { FaGem, FaShieldAlt, FaGlobe, FaHeart } from 'react-icons/fa';
 import PageHero from '@/components/layout/PageHero';
@@ -45,7 +55,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Stats */}
+      {/* Stats *\/}
       <section className="border-y border-slate-200/70 bg-white">
         <div className="container-luxe grid grid-cols-2 gap-8 py-12 lg:grid-cols-4">
           {STATS.map(([stat, label]) => (
@@ -57,7 +67,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Values */}
+      {/* Values *\/}
       <section className="container-luxe py-16">
         <div className="mb-10 text-center">
           <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-accent-dark">What We Stand For</p>
@@ -76,7 +86,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA *\/}
       <section className="container-luxe pb-16">
         <div className="relative overflow-hidden rounded-3xl bg-dark-gradient px-8 py-14 text-center">
           <div className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full bg-accent/20 blur-3xl" />
@@ -92,3 +102,5 @@ export default function AboutPage() {
     </>
   );
 }
+
+─────────────────────────────────────────────────────────────────────── */

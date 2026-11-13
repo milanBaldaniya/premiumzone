@@ -30,6 +30,10 @@ export const catalogApi = baseApi.injectEndpoints({
       query: () => '/categories/tree',
       providesTags: ['Category'],
     }),
+    getCategories: build.query({
+      query: (params) => `/categories?${qs(params)}`,
+      providesTags: ['Category'],
+    }),
     getBrands: build.query({
       query: (params) => `/brands?${qs(params)}`,
       providesTags: ['Brand'],
@@ -75,6 +79,7 @@ export const {
   useGetProductBySlugQuery,
   useGetRelatedProductsQuery,
   useGetCategoryTreeQuery,
+  useGetCategoriesQuery,
   useGetBrandsQuery,
   useGetTopReviewsQuery,
   useGetProductReviewsQuery,

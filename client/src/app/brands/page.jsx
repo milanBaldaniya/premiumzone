@@ -1,3 +1,13 @@
+import { notFound } from 'next/navigation';
+
+// Page temporarily disabled — replaced by /categories. See commented-out original below.
+// To restore: delete this stub and uncomment the block.
+export default function BrandsPage() {
+  notFound();
+}
+
+/* ─── ORIGINAL PAGE (disabled) ───────────────────────────────────────────
+
 'use client';
 
 import Link from 'next/link';
@@ -55,3 +65,5 @@ export default function BrandsPage() {
     </div>
   );
 }
+
+─────────────────────────────────────────────────────────────────────── */

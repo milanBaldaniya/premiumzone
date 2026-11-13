@@ -5,7 +5,7 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import ProductGrid, { ProductGridSkeleton } from '@/components/product/ProductGrid';
 import Select from '@/components/ui/Select';
-import { catalogApi, useGetBrandsQuery } from '@/store/api/catalogApi';
+import { catalogApi, useGetCategoriesQuery } from '@/store/api/catalogApi';
 
 const SORTS = [
   { label: 'Newest', value: '-createdAt' },
@@ -38,7 +38,7 @@ function CatalogContent() {
 
   // ── URL is the single source of truth for every filter ──
   const search = searchParams.get('search') || '';
-  const brand = searchParams.get('brand') || '';
+  const category = searchParams.get('category') || '';
   const gender = searchParams.get('gender') || '';
   const sort = searchParams.get('sort') || '-createdAt';
   const urlMaxPrice = searchParams.get('maxPrice') || '';
@@ -77,13 +77,13 @@ function CatalogContent() {
   // once, right when page N actually arrives — no dependence on effect/render
   // timing lining up with a hook's internal state transitions.
   const dispatch = useDispatch();
-  const { data: brandsData } = useGetBrandsQuery({ limit: 50 });
+  const { data: categoriesData } = useGetCategoriesQuery({ limit: 50 });
 
   const [page, setPage] = useState(0);
   const [items, setItems] = useState([]);
   const [meta, setMeta] = useState(null);
   const [isFetchingPage, setIsFetchingPage] = useState(false);
-  const filterKey = JSON.stringify({ search, brand, gender, sort, urlMaxPrice, flagFilters });
+  const filterKey = JSON.stringify({ search, category, gender, sort, urlMaxPrice, flagFilters });
 
   const loadPage = async (pageNum) => {
     setIsFetchingPage(true);
@@ -92,7 +92,7 @@ function CatalogContent() {
         catalogApi.endpoints.getProducts.initiate({
           search: search || undefined,
           sort,
-          brand: brand || undefined,
+          category: category || undefined,
           gender: gender || undefined,
           'price[lte]': urlMaxPrice || undefined,
           page: pageNum,
@@ -132,7 +132,7 @@ function CatalogContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFetchingPage, meta?.hasNext, page]);
 
-  const hasFilters = search || brand || gender || urlMaxPrice || Object.keys(flagFilters).length;
+  const hasFilters = search || category || gender || urlMaxPrice || Object.keys(flagFilters).length;
   const isInitialLoading = isFetchingPage && page === 0;
   const isLoadingMore = isFetchingPage && page > 0;
 
@@ -180,14 +180,14 @@ function CatalogContent() {
           </div>
 
           <div>
-            <h3 className="mb-3 font-sans text-sm font-semibold text-primary">Brand</h3>
+            <h3 className="mb-3 font-sans text-sm font-semibold text-primary">Category</h3>
             <Select
-              value={brand}
-              onChange={(v) => setParams({ brand: v })}
-              placeholder="All Brands"
+              value={category}
+              onChange={(v) => setParams({ category: v })}
+              placeholder="All Categories"
               options={[
-                { label: 'All Brands', value: '' },
-                ...(brandsData?.data?.map((b) => ({ label: b.name, value: b._id })) || []),
+                { label: 'All Categories', value: '' },
+                ...(categoriesData?.data?.map((c) => ({ label: c.name, value: c._id })) || []),
               ]}
             />
           </div>

@@ -11,11 +11,9 @@ import { useLogoutMutation } from '@/store/api/authApi';
 import SearchOverlay from './SearchOverlay';
 
 const NAV = [
-  { label: 'Watches', href: '/products?category=watches' },
-  { label: 'Gadgets', href: '/products?category=gadgets' },
+  { label: 'Categories', href: '/categories' },
   { label: 'Men', href: '/products?gender=men' },
   { label: 'Women', href: '/products?gender=women' },
-  { label: 'Brands', href: '/brands' },
   { label: 'New Arrivals', href: '/products?sort=-createdAt' },
   { label: 'Blog', href: '/blog' },
 ];

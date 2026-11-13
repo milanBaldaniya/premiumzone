@@ -24,10 +24,8 @@ async function fetchAll(path) {
 const STATIC_ROUTES = [
   { path: '', changeFrequency: 'daily', priority: 1 },
   { path: '/products', changeFrequency: 'daily', priority: 0.9 },
-  { path: '/brands', changeFrequency: 'weekly', priority: 0.7 },
+  { path: '/categories', changeFrequency: 'weekly', priority: 0.7 },
   { path: '/blog', changeFrequency: 'weekly', priority: 0.6 },
-  { path: '/about', changeFrequency: 'monthly', priority: 0.5 },
-  { path: '/contact', changeFrequency: 'monthly', priority: 0.5 },
   { path: '/faq', changeFrequency: 'monthly', priority: 0.5 },
   { path: '/terms', changeFrequency: 'yearly', priority: 0.3 },
   { path: '/privacy', changeFrequency: 'yearly', priority: 0.3 },

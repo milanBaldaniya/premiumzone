@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { FaChevronDown } from 'react-icons/fa';
+import { FaChevronDown, FaWhatsapp } from 'react-icons/fa';
 import PageHero from '@/components/layout/PageHero';
+import { useGetPublicSettingsQuery } from '@/store/api/catalogApi';
+import { buildWhatsappLink } from '@/lib/whatsapp';
 
 const FAQS = [
   {
@@ -66,6 +67,8 @@ function FaqItem({ q, a, open, onToggle }) {
 
 export default function FaqPage() {
   const [openIndex, setOpenIndex] = useState(0);
+  const { data: settingsData } = useGetPublicSettingsQuery();
+  const whatsappHref = buildWhatsappLink(settingsData?.data?.store?.whatsapp, 'Hi! I have a question that wasn\'t covered in your FAQ.');
 
   return (
     <>
@@ -90,9 +93,16 @@ export default function FaqPage() {
         <div className="mt-12 rounded-2xl border border-slate-200 bg-white p-8 text-center">
           <h2 className="font-display text-xl font-bold text-primary">Still have questions?</h2>
           <p className="mt-2 text-sm text-slate-500">Our concierge team is happy to help.</p>
-          <Link href="/contact" className="btn-gold mt-5">
-            Contact Us
-          </Link>
+          {whatsappHref && (
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1ebe5b]"
+            >
+              <FaWhatsapp size={16} /> Message Us on WhatsApp
+            </a>
+          )}
         </div>
       </section>
     </>

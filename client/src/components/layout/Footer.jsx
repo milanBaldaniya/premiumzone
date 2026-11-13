@@ -6,15 +6,14 @@ const COLUMNS = [
     title: 'Shop',
     links: [
       { label: 'All Products', href: '/products' },
-      { label: 'Luxury Watches', href: '/products?category=watches' },
-      { label: 'Smart Gadgets', href: '/products?category=gadgets' },
-      { label: 'Brands', href: '/brands' },
+      { label: 'Categories', href: '/categories' },
+      { label: 'Men', href: '/products?gender=men' },
+      { label: 'Women', href: '/products?gender=women' },
     ],
   },
   {
     title: 'Support',
     links: [
-      { label: 'Contact', href: '/contact' },
       { label: 'FAQ', href: '/faq' },
       { label: 'Shipping', href: '/shipping' },
       { label: 'Track Order', href: '/shipping' },
@@ -23,7 +22,6 @@ const COLUMNS = [
   {
     title: 'Company',
     links: [
-      { label: 'About', href: '/about' },
       { label: 'Blog', href: '/blog' },
       { label: 'Privacy Policy', href: '/privacy' },
       { label: 'Terms', href: '/terms' },

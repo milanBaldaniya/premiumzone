@@ -110,9 +110,9 @@ export default function ShippingPage() {
               <FaWhatsapp size={16} /> Message Us on WhatsApp
             </a>
           ) : (
-            <Link href="/contact" className="btn-gold mt-5 inline-flex">
-              Contact Us
-            </Link>
+            <a href="mailto:premiumproductszone353@gmail.com" className="btn-gold mt-5 inline-flex">
+              Email Us
+            </a>
           )}
         </div>
 

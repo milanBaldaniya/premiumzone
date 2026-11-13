@@ -82,9 +82,9 @@ export default function ProductDetailClient({ slug }) {
 
         {/* Info */}
         <div>
-          {product.brand?.name && (
+          {product.category?.name && (
             <p className="text-sm font-semibold uppercase tracking-wider text-accent-dark">
-              {product.brand.name}
+              {product.category.name}
             </p>
           )}
           <h1 className="mt-2 font-display text-3xl font-bold text-primary">{product.name}</h1>

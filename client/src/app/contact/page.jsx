@@ -1,3 +1,13 @@
+import { notFound } from 'next/navigation';
+
+// Page temporarily disabled — see commented-out original below. To restore: delete this
+// stub and uncomment the block.
+export default function ContactPage() {
+  notFound();
+}
+
+/* ─── ORIGINAL PAGE (disabled) ───────────────────────────────────────────
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -33,7 +43,7 @@ export default function ContactPage() {
       />
 
       <section className="container-luxe grid gap-10 py-16 lg:grid-cols-[1fr_1.4fr]">
-        {/* Info */}
+        {/* Info *\/}
         <div className="space-y-4">
           {INFO.map((item) => (
             <div key={item.label} className="card-luxe flex items-center gap-4 p-5">
@@ -48,7 +58,7 @@ export default function ContactPage() {
           ))}
         </div>
 
-        {/* Form */}
+        {/* Form *\/}
         <form onSubmit={handleSubmit(onSubmit)} className="card-luxe space-y-4 p-8">
           <h2 className="font-display text-2xl font-bold text-primary">Send a Message</h2>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -73,3 +83,5 @@ export default function ContactPage() {
     </>
   );
 }
+
+─────────────────────────────────────────────────────────────────────── */
