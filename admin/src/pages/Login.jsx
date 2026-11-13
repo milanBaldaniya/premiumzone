@@ -54,12 +54,12 @@ export default function Login() {
           >
             <img
               src="/logo-icon.png"
-              alt="Premium Product Zone"
+              alt="Premium Products Zone"
               style={{ width: '100%', height: '100%', objectFit: 'contain' }}
             />
           </div>
           <Title level={3} style={{ marginTop: 16, marginBottom: 4 }}>
-            Premium Product Zone
+            Premium Products Zone
           </Title>
           <Text type="secondary">Sign in to your console</Text>
         </div>

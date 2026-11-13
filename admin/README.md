@@ -1,4 +1,4 @@
-# Premium Product Zone — Admin Console
+# Premium Products Zone — Admin Console
 
 Internal admin dashboard for managing the storefront.
 **React + Vite** in plain JavaScript — no TypeScript.

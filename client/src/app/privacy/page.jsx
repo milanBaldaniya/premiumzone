@@ -2,7 +2,7 @@ import LegalPage from '@/components/layout/LegalPage';
 
 export const metadata = {
   title: 'Privacy Policy',
-  description: 'How Premium Product Zone collects, uses and protects your personal information.',
+  description: 'How Premium Products Zone collects, uses and protects your personal information.',
 };
 
 const SECTIONS = [

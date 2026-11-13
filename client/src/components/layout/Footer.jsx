@@ -17,7 +17,7 @@ const COLUMNS = [
       { label: 'Contact', href: '/contact' },
       { label: 'FAQ', href: '/faq' },
       { label: 'Shipping', href: '/shipping' },
-      { label: 'Track Order', href: '/account/orders' },
+      { label: 'Track Order', href: '/shipping' },
     ],
   },
   {
@@ -38,9 +38,9 @@ export default function Footer() {
         <div className="lg:col-span-2">
           <div className="flex items-center gap-2">
             <span className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-lg bg-black p-1">
-              <img src="/logo-icon.png" alt="Premium Product Zone" className="h-full w-full object-contain" />
+              <img src="/logo-icon.png" alt="Premium Products Zone" className="h-full w-full object-contain" />
             </span>
-            <span className="font-display text-2xl font-bold text-white">Premium Product Zone</span>
+            <span className="font-display text-2xl font-bold text-white">Premium Products Zone</span>
           </div>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">
             Precision. Prestige. Perfection. Curated luxury watches and premium gadgets for those
@@ -79,7 +79,7 @@ export default function Footer() {
 
       <div className="border-t border-white/10">
         <div className="container-luxe flex flex-col items-center justify-between gap-3 py-6 text-xs text-slate-500 sm:flex-row">
-          <p>© {new Date().getFullYear()} Premium Product Zone. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Premium Products Zone. All rights reserved.</p>
           <p>Order via WhatsApp or Cash on Delivery</p>
         </div>
       </div>

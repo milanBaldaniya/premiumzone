@@ -7,7 +7,6 @@ import toast from 'react-hot-toast';
 import { FaHeart, FaShoppingBag } from 'react-icons/fa';
 import { useAddToCartMutation, useToggleWishlistMutation } from '@/store/api/commerceApi';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
-import Rating from '@/components/ui/Rating';
 import { formatPrice, discountPercent } from '@/lib/utils';
 
 const PLACEHOLDER =
@@ -82,7 +81,6 @@ export default function ProductCard({ product }) {
             </p>
           )}
           <h3 className="line-clamp-1 font-sans text-sm font-semibold text-ink">{product.name}</h3>
-          <Rating value={product.ratingsAverage} count={product.ratingsCount} />
 
           <div className="flex items-center justify-between gap-2 pt-1">
             <div className="flex min-w-0 flex-col">

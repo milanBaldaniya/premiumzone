@@ -17,8 +17,8 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Premium Product Zone — Precision. Prestige. Perfection.',
-    template: '%s | Premium Product Zone',
+    default: 'Premium Products Zone — Precision. Prestige. Perfection.',
+    template: '%s | Premium Products Zone',
   },
   description:
     'Discover luxury watches and premium gadgets from Rolex, Apple, Samsung, Nothing and more. Elegant, curated, and crafted for those who value time.',
@@ -28,11 +28,11 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    title: 'Premium Product Zone',
+    title: 'Premium Products Zone',
     description: 'Luxury watches & premium gadgets.',
     url: SITE_URL,
-    siteName: 'Premium Product Zone',
-    images: [{ url: '/logo-full.png', width: 800, height: 1021, alt: 'Premium Product Zone' }],
+    siteName: 'Premium Products Zone',
+    images: [{ url: '/logo-full.png', width: 800, height: 1021, alt: 'Premium Products Zone' }],
   },
   twitter: { card: 'summary_large_image' },
 };
@@ -40,7 +40,7 @@ export const metadata = {
 const ORGANIZATION_JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Premium Product Zone',
+  name: 'Premium Products Zone',
   url: SITE_URL,
   logo: `${SITE_URL}/logo-full.png`,
   email: 'premiumproductszone353@gmail.com',
@@ -51,7 +51,7 @@ const ORGANIZATION_JSON_LD = {
 const WEBSITE_JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Premium Product Zone',
+  name: 'Premium Products Zone',
   url: SITE_URL,
   potentialAction: {
     '@type': 'SearchAction',

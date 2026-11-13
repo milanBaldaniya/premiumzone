@@ -11,7 +11,6 @@ import {
 import { useAddToCartMutation, useToggleWishlistMutation } from '@/store/api/commerceApi';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import Button from '@/components/ui/Button';
-import Rating from '@/components/ui/Rating';
 import ProductGallery from '@/components/product/ProductGallery';
 import ProductGrid from '@/components/product/ProductGrid';
 import ProductReviews from '@/components/product/ProductReviews';
@@ -90,7 +89,6 @@ export default function ProductDetailClient({ slug }) {
           )}
           <h1 className="mt-2 font-display text-3xl font-bold text-primary">{product.name}</h1>
           <div className="mt-3 flex items-center gap-4">
-            <Rating value={product.ratingsAverage} count={product.ratingsCount} />
             {product.inStock ? (
               <span className="flex items-center gap-1 text-xs font-medium text-green-600">
                 <FaCheck size={10} /> In Stock
@@ -188,11 +186,7 @@ export default function ProductDetailClient({ slug }) {
         )}
       </div>
 
-      <ProductReviews
-        productId={product._id}
-        ratingsAverage={product.ratingsAverage}
-        ratingsCount={product.ratingsCount}
-      />
+      <ProductReviews productId={product._id} ratingsCount={product.ratingsCount} />
 
       {related?.data?.length > 0 && (
         <section className="mt-16">

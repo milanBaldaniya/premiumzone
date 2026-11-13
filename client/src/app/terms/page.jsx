@@ -2,7 +2,7 @@ import LegalPage from '@/components/layout/LegalPage';
 
 export const metadata = {
   title: 'Terms & Conditions',
-  description: 'The terms governing your use of Premium Product Zone and purchases made through our store.',
+  description: 'The terms governing your use of Premium Products Zone and purchases made through our store.',
 };
 
 const SECTIONS = [
@@ -16,7 +16,7 @@ const SECTIONS = [
   {
     heading: 'Intellectual Property',
     body: [
-      'All content, including images, logos, and text, are the property of Premium Product Zone unless otherwise stated. Unauthorized use may lead to legal action.',
+      'All content, including images, logos, and text, are the property of Premium Products Zone unless otherwise stated. Unauthorized use may lead to legal action.',
     ],
   },
   {

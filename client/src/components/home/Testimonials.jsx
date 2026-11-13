@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FaQuoteLeft, FaCheckCircle } from 'react-icons/fa';
 import { useGetTopReviewsQuery } from '@/store/api/catalogApi';
-import Rating from '@/components/ui/Rating';
 
 const listVariants = {
   hidden: {},
@@ -36,7 +35,7 @@ export default function Testimonials() {
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Testimonials</span>
           <h2 className="mt-2 font-display text-3xl font-bold text-white sm:text-4xl">What Our Customers Say</h2>
           <p className="mx-auto mt-3 max-w-lg text-sm text-slate-400">
-            Real experiences from collectors and enthusiasts who trust Premium Product Zone.
+            Real experiences from collectors and enthusiasts who trust Premium Products Zone.
           </p>
         </div>
 
@@ -63,10 +62,6 @@ export default function Testimonials() {
                 className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm transition-colors duration-300 hover:border-accent/30 hover:bg-white/[0.06]"
               >
                 <FaQuoteLeft className="text-2xl text-accent/25 transition-colors duration-300 group-hover:text-accent/40" />
-
-                <div className="mt-3">
-                  <Rating value={r.rating} size="text-xs" />
-                </div>
 
                 {r.title && <p className="mt-3 font-semibold text-white">{r.title}</p>}
                 <p className="mt-1.5 line-clamp-4 flex-1 text-sm leading-relaxed text-slate-300">{r.comment}</p>

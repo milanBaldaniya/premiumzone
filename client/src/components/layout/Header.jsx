@@ -44,10 +44,10 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg bg-black p-1">
-            <img src="/logo-icon.png" alt="Premium Product Zone" className="h-full w-full object-contain" />
+            <img src="/logo-icon.png" alt="Premium Products Zone" className="h-full w-full object-contain" />
           </span>
           <span className="hidden font-display text-xl font-bold tracking-tight text-primary sm:block">
-            Premium Product Zone
+            Premium Products Zone
           </span>
         </Link>
 

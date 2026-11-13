@@ -1,4 +1,4 @@
-# Premium Product Zone — Premium eCommerce Platform
+# Premium Products Zone — Premium eCommerce Platform
 
 A production-ready, scalable eCommerce platform for **luxury watches & premium gadgets**.
 Three independent repositories that work together seamlessly.

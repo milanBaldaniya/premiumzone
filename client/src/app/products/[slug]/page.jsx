@@ -28,7 +28,7 @@ export async function generateMetadata({ params }) {
     product.seo?.metaDescription ||
     product.shortDescription ||
     product.description?.slice(0, 160) ||
-    `${product.name} — available now at Premium Product Zone.`;
+    `${product.name} — available now at Premium Products Zone.`;
   const inStock = (product.stock ?? 0) > 0;
 
   return {
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }) {
       title,
       description,
       url,
-      siteName: 'Premium Product Zone',
+      siteName: 'Premium Products Zone',
       type: 'website',
       locale: 'en_IN',
       images: image ? [{ url: image, width: 1000, height: 1000, alt: product.name }] : undefined,
@@ -56,7 +56,7 @@ export async function generateMetadata({ params }) {
       'product:price:amount': String(price),
       'product:price:currency': product.currency || 'INR',
       'product:availability': inStock ? 'in stock' : 'out of stock',
-      'product:brand': product.brand?.name || 'Premium Product Zone',
+      'product:brand': product.brand?.name || 'Premium Products Zone',
     },
   };
 }
@@ -74,16 +74,7 @@ function ProductJsonLd({ product, slug }) {
     description: product.shortDescription || product.description?.slice(0, 300),
     image: [product.thumbnail?.url, ...(product.gallery?.map((g) => g.url) || [])].filter(Boolean),
     sku: product.sku,
-    brand: { '@type': 'Brand', name: product.brand?.name || 'Premium Product Zone' },
-    ...(product.ratingsCount > 0
-      ? {
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: product.ratingsAverage,
-            reviewCount: product.ratingsCount,
-          },
-        }
-      : {}),
+    brand: { '@type': 'Brand', name: product.brand?.name || 'Premium Products Zone' },
     offers: {
       '@type': 'Offer',
       url,

@@ -4,7 +4,7 @@ export const metadata = {
     'Browse our full collection of luxury watches and premium gadgets — authentic, curated, and ready to ship across India.',
   alternates: { canonical: '/products' },
   openGraph: {
-    title: 'Shop All Products | Premium Product Zone',
+    title: 'Shop All Products | Premium Products Zone',
     description:
       'Browse our full collection of luxury watches and premium gadgets — authentic, curated, and ready to ship across India.',
     url: '/products',

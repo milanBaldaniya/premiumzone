@@ -1,4 +1,4 @@
-# Premium Product Zone — Backend API
+# Premium Products Zone — Backend API
 
 Production-ready REST API for a luxury watches & premium gadgets eCommerce platform.
 Built with **Node.js + Express + MongoDB (Mongoose)**. Plain JavaScript (ESM), no TypeScript.

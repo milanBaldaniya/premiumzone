@@ -62,13 +62,13 @@ const Logo = ({ collapsed }) => (
     >
       <img
         src="/logo-icon.png"
-        alt="Premium Product Zone"
+        alt="Premium Products Zone"
         style={{ width: '100%', height: '100%', objectFit: 'contain' }}
       />
     </span>
     {!collapsed && (
       <span style={{ fontFamily: 'Playfair Display, serif', fontSize: 16, fontWeight: 700 }}>
-        Premium Product Zone
+        Premium Products Zone
       </span>
     )}
   </div>

@@ -11,7 +11,6 @@ const SORTS = [
   { label: 'Newest', value: '-createdAt' },
   { label: 'Price: Low to High', value: 'price' },
   { label: 'Price: High to Low', value: '-price' },
-  { label: 'Top Rated', value: '-ratingsAverage' },
 ];
 
 const GENDERS = [
